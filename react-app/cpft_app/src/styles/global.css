@@ -1,0 +1,40 @@
+/* src/styles/global.css */
+:root {
+    /* Colors */
+    --color-primary: #2E8DEF;
+    --color-secondary: #6DD78E;
+    --color-accent: #FFB300;
+    --color-background: #F8F8F8;
+    --color-text: #333333;
+    --color-error: #E74C3C;
+  
+    /* Typography */
+    --font-family-base: 'Inter', system-ui, sans-serif;
+    --font-size-body: 16px;
+    --font-size-h1: 32px;
+    --font-size-h2: 24px;
+    --font-size-h3: 20px;
+    --font-weight-normal: 400;
+    --font-weight-semi: 600;
+    --font-weight-bold: 700;
+  
+    /* Spacing (4px scale) */
+    --spacing-xs: 4px;
+    --spacing-s: 8px;
+    --spacing-m: 16px;
+    --spacing-l: 24px;
+    --spacing-xl: 32px;
+  }
+  
+  html, body {
+    margin: 0;
+    padding: 0;
+    font-family: var(--font-family-base);
+    background-color: var(--color-background);
+    color: var(--color-text);
+  }
+  
+  * {
+    box-sizing: border-box;
+  }
+  
