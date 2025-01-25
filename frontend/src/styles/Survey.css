@@ -1,0 +1,23 @@
+.Survey {
+    padding: var(--spacing-m);
+    background: var(--color-background);
+    color: var(--color-text);
+}
+
+label, select, button {
+    display: block;
+    margin-bottom: var(--spacing-s);
+    font-size: var(--font-size-body);
+}
+
+button {
+    background-color: var(--color-primary);
+    color: #fff;
+    border: none;
+    padding: var(--spacing-s) var(--spacing-m);
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: var(--color-secondary);
+}

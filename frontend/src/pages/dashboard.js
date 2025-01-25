@@ -20,6 +20,7 @@ const Dashboard = () => {
         <p>No workouts needed. You are Fine just the way you are.</p>
         <button onClick={fitnessPlan}>Fitness Plan</button>
         <button onClick={workout}>Workout</button>
+        <button onClick={() => navigate("/survey")}>Take Fitness Survey</button>
       </div>
     );
   };
