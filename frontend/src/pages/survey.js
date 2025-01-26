@@ -41,6 +41,7 @@ const Survey = () => {
             <option value="">Select</option>
             <option value="bodyweight">Bodyweight</option>
             <option value="weights">Weights</option>
+            <option value="none">None</option>
           </select>
   
           <label>Fitness Level:</label>
