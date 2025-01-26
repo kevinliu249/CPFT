@@ -1,7 +1,7 @@
 /* Global Styles used on all pages */
 
 :root {
-  /* Colors */
+  /* Light Theme (Default) */
   --color-primary: #2E8DEF;
   --color-secondary: #6DD78E;
   --color-accent: #FFB300;
@@ -25,6 +25,16 @@
   --spacing-m: 16px;
   --spacing-l: 24px;
   --spacing-xl: 32px;
+}
+
+/* Dark Theme */
+[data-theme="dark"] {
+  --color-primary: #1E3A8A;
+  --color-secondary: #34D399;
+  --color-accent: #FACC15;
+  --color-background: #1F2937;
+  --color-text: #F9FAFB;
+  --color-error: #E74C3C;
 }
 
 html, body {
