@@ -24,7 +24,7 @@ def register_user_route():
         if error:
             return jsonify({"message": error}), 400
         
-        # If registration is successful, return user data (or any other info)
+        # If registration is successful, return user data (username)
         return jsonify({"message": "User registered successfully", "user": user}), 201
 
     except Exception as e:
