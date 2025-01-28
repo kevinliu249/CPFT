@@ -1,23 +1,69 @@
 .Survey {
-    padding: var(--spacing-m);
-    background: var(--color-background);
-    color: var(--color-text);
+  margin-top: 5vh;
+  text-align: center;
+  font-weight: bold;
+  padding: var(--spacing-m);
+  background: var(--color-background);
+  color: var(--color-text);
 }
 
-label, select, button {
-    display: block;
-    margin-bottom: var(--spacing-s);
-    font-size: var(--font-size-body);
+.Survey h1 {
+  font-size: var(--font-size-h1);
+  margin-bottom: var(--spacing-m);
 }
 
-button {
-    background-color: var(--color-primary);
-    color: #fff;
-    border: none;
-    padding: var(--spacing-s) var(--spacing-m);
-    cursor: pointer;
+.Survey h3 {
+  font-size: var(--font-size-h2);
+  color: var(--color-secondary);
+  margin-bottom: var(--spacing-s);
 }
 
-button:hover {
-    background-color: var(--color-secondary);
+.Survey hr {
+  width: 75%;
+  margin-top: 20px;
+  max-width: 500px;
+}
+
+.Survey label {
+  font-size: var(--font-size-body);
+  margin-top: var(--spacing-m);
+  display: block;
+  text-align: left;
+}
+
+.Survey select {
+  padding: var(--spacing-s);
+  border-radius: var(--spacing-xs);
+  font-size: var(--font-size-body);
+  margin-bottom: var(--spacing-m);
+  width: 100%;
+  max-width: 300px;
+  border: 1px solid var(--color-primary);
+}
+
+.Survey button {
+  background-color: var(--color-primary);
+  color: white;
+  border: none;
+  padding: var(--spacing-s) var(--spacing-m);
+  font-size: var(--font-size-body);
+  border-radius: var(--spacing-xs);
+  margin-top: var(--spacing-m);
+  cursor: pointer;
+}
+
+.Survey button:hover {
+  background-color: var(--color-secondary);
+}
+
+.Survey form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.ThemeToggleButton {
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
 }

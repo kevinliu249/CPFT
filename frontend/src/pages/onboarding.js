@@ -2,6 +2,7 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import "../styles/App.css";
 import "../styles/Onboarding.css";
+import ThemeToggleButton from "../component/ThemeToggleButton";
 import picture from "../images/onboarding.png"
 
 const Onboarding = () => {
@@ -30,6 +31,7 @@ const Onboarding = () => {
       <button onClick={loginNavigate}>Login</button>
 
       <button onClick={registerNaviate}>New User? <br></br>Click to Register</button>
+      <ThemeToggleButton /> {/* Add the theme toggle button */}
     </div>
   );
 };
