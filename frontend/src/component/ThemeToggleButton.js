@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import { GlobalStateContext } from "../context/GlobalStateContext";
-import "../styles/Dashboard.css"; // Reuse the existing CSS styles
+import "../styles/App.css"; // Reuses the existing CSS styles
 
 const ThemeToggleButton = () => {
   const { toggleTheme } = useContext(GlobalStateContext);

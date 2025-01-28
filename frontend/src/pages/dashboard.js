@@ -16,7 +16,7 @@ const Dashboard = () => {
       <button onClick={() => navigate("/fitnessPlan")}>Fitness Plan</button>
       <button onClick={() => navigate("/workout")}>Workout</button>
       <button onClick={() => navigate("/survey")}>Take Survey</button>
-      <ThemeToggleButton /> {/* Add the theme toggle button */}
+      <ThemeToggleButton /> {/* Added the theme toggle button */}
     </div>
   );
 };

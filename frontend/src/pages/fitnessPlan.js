@@ -9,7 +9,7 @@ const FitnessPlan = () => {
     return (
       <div className="FitnessPlan">
         <p>FitnessPlan</p>
-        <ThemeToggleButton /> {/* Add the theme toggle button */}
+        <ThemeToggleButton /> {/* Added the theme toggle button */}
       </div>
     );
   };
