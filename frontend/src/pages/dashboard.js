@@ -3,10 +3,11 @@ import { useNavigate } from "react-router-dom";
 import { GlobalStateContext } from "../context/GlobalStateContext";
 import '../styles/App.css';
 import '../styles/Dashboard.css';
+import ThemeToggleButton from "../component/ThemeToggleButton";
 
 const Dashboard = () => {
   const navigate = useNavigate();
-  const { theme, toggleTheme } = useContext(GlobalStateContext);
+  const { theme } = useContext(GlobalStateContext);
 
   return (
     <div className={`Dashboard ${theme}`}>
@@ -15,7 +16,7 @@ const Dashboard = () => {
       <button onClick={() => navigate("/fitnessPlan")}>Fitness Plan</button>
       <button onClick={() => navigate("/workout")}>Workout</button>
       <button onClick={() => navigate("/survey")}>Take Survey</button>
-      <button className="theme-toggle-btn" onClick={toggleTheme}>Toggle Theme</button>
+      <ThemeToggleButton /> {/* Added the theme toggle button */}
     </div>
   );
 };

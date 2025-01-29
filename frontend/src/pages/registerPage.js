@@ -2,6 +2,7 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import '../styles/App.css';
 import '../styles/Register.css';
+import ThemeToggleButton from '../component/ThemeToggleButton';
 
 const Register = () => {
   const navigate = useNavigate();
@@ -26,6 +27,8 @@ const Register = () => {
       <input type="password" id="password" name="password" /><br />
       <button onClick={loginNavigate}>Create Account</button>
 
+      <ThemeToggleButton /> {/* Add the theme toggle button */}
+      
     </div>
   );
 }
