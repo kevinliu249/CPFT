@@ -1,0 +1,95 @@
+.Register {
+  margin-top: 10vh;
+  text-align: center;
+  font-weight: bold;
+}
+
+.Register #registercontainer {
+  border: 1.5px solid black;
+  width: 500px;
+  max-width: 95vw;
+  margin: 30px auto;
+  padding: 1%;
+  box-shadow: 5px 10px #888888;
+}
+
+.Register #registercontainer h1 {
+  font-size: 3em;
+}
+
+.Register #registercontainer #errorWindow {
+  background-color: rgb(255, 61, 61);
+  width: 80%;
+  margin: 0 auto;
+  padding: 20px;
+  border-radius: 5px;
+  border: 2px solid rgb(255, 162, 0);
+  color: white;
+  display: none;
+}
+
+.Register img {
+  width: 50%;
+  max-width: 300px;
+}
+
+.Register hr {
+  width: 75%;
+  margin-top: 20px;
+  max-width: 500px;
+}
+
+.Register label {
+  font-size: 1.5em;
+  margin-top: 1vh;
+  display: block;
+  text-align: center;
+}
+
+.Register input {
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid #000; 
+  width: 200px;
+  display: block;
+  margin: 0 auto;
+  text-align: left;
+}
+
+.Register button {
+  margin: 0 auto;     
+  margin-top: 2vh;
+  font-weight: bold;
+  font-size: 1.2em;
+  max-width: 250px;
+}
+
+.Register button:nth-of-type(1) {
+  background-color: blue;
+  padding: 20px;
+  width: 50%;
+  border-radius: 20px;
+  margin-top: 2vh;
+  color: white;
+  border: 2px solid white;
+}
+
+.Register button:nth-of-type(1):hover {
+  background-color: white;
+  color: purple;
+  border: 2px solid purple;
+}
+
+.Register h5 {
+  cursor: pointer;
+  color: blue;
+  text-decoration: underline;
+}
+
+.button-group {
+    display: flex;
+    flex-direction: column; /* Stacks the buttons vertically */
+    align-items: center; /* Center aligns them */
+    gap: var(--spacing-m); /* Adds space */
+  }
+

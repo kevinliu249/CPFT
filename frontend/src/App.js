@@ -14,14 +14,19 @@ class App extends Component {
     username: "User1234"
   }
 
+  setUsername = (newUsername) => {
+    this.setState({ username: newUsername });
+    console.log("3", this.state.username);
+  };
+
   render() {
     return (
       <Router>
         <div className="App">
           <Routes>
             <Route path="/" element={<Onboarding />} />
-            <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/register" element={<Register />} />
+            <Route path="/dashboard" element={<Dashboard username={this.state.username} />} />
+            <Route path="/register" element={<Register setUsername={this.setUsername} />}/>
             <Route path="/fitnessPlan" element={<FitnessPlan />} />
             <Route path="/workout" element={<Workout />} />
             <Route path="/survey" element={<Survey />} />
