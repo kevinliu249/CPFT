@@ -18,7 +18,7 @@ const Register = ({ setUsername }) => {
   }
 
   const validatePassword = (pass1, pass2) => {
-    if (pass1.split("").length < 7 ) {
+    if (pass1.split("").length <= 8 ) {
       errorDisplay("Your Passwords are too short!");
       document.getElementById("password1").value = ""
       document.getElementById("password2").value = ""
@@ -51,9 +51,7 @@ const Register = ({ setUsername }) => {
 
       if (tmpBackendResponse) {
         // Succuessful Create Account!
-        console.log("1")
         setUsername(document.getElementById("username").value);
-        console.log("2")
         navigate("/dashboard");
       } else {
         errorDisplay("That Email is already registered for an account.")
