@@ -38,7 +38,7 @@ const Workout = () => {
 
   return (
     <div className="Workout">
-      <div id="workoutContainer"> {/* Mirroring Register Page styling */}
+      <div id="workoutContainer"> 
         <h1>Today's Workout</h1>
         <hr />
         <div className="workout-list">
