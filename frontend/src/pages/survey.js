@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../styles/Survey.css";
-import ThemeToggleButton from "../component/ThemeToggleButton";
 
 const Survey = () => {
   const navigate = useNavigate();
@@ -79,7 +78,6 @@ const Survey = () => {
           Want to skip? Go to Dashboard
         </h5>
       </div>
-      <ThemeToggleButton />
     </div>
   );
 };

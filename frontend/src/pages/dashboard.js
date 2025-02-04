@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import { GlobalStateContext } from "../context/GlobalStateContext";
 import '../styles/App.css';
 import '../styles/Dashboard.css';
-import ThemeToggleButton from "../component/ThemeToggleButton";
 
 const Dashboard = ({ username }) => {
   const navigate = useNavigate();
@@ -17,7 +16,7 @@ const Dashboard = ({ username }) => {
       <button onClick={() => navigate("/fitnessPlan")}>Fitness Plan</button>
       <button onClick={() => navigate("/workout")}>Workout</button>
       <button onClick={() => navigate("/survey")}>Take Survey</button>
-      <ThemeToggleButton /> {/* Added the theme toggle button */}
+      <button onClick={() => navigate("/settings")}>Settings</button> 
     </div>
   );
 };

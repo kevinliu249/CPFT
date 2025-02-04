@@ -7,6 +7,7 @@ import Register from "./pages/registerPage";
 import FitnessPlan from "./pages/fitnessPlan";
 import Workout from "./pages/workout";
 import Survey from "./pages/survey";
+import Settings from "./pages/settings";
 
 class App extends Component {
 
@@ -30,6 +31,7 @@ class App extends Component {
             <Route path="/fitnessPlan" element={<FitnessPlan />} />
             <Route path="/workout" element={<Workout />} />
             <Route path="/survey" element={<Survey />} />
+            <Route path="/settings" element={<Settings />} />
           </Routes>
         </div>
       </Router>
