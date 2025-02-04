@@ -5,13 +5,14 @@ import '../styles/App.css';
 import '../styles/Dashboard.css';
 import ThemeToggleButton from "../component/ThemeToggleButton";
 
-const Dashboard = () => {
+const Dashboard = ({ username }) => {
   const navigate = useNavigate();
   const { theme } = useContext(GlobalStateContext);
 
   return (
     <div className={`Dashboard ${theme}`}>
       <h1>Dashboard</h1>
+      <h2>Welcome {username}</h2>
       <p>No workouts needed. You are Fine just the way you are.</p>
       <button onClick={() => navigate("/fitnessPlan")}>Fitness Plan</button>
       <button onClick={() => navigate("/workout")}>Workout</button>
