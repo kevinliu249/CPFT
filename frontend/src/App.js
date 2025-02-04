@@ -4,7 +4,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Onboarding from "./pages/onboarding";
 import Dashboard from "./pages/dashboard";
 import Register from "./pages/registerPage";
-import FitnessPlan from "./pages/fitnessPlan";
+import FitnessData from "./pages/fitnessData";
 import Workout from "./pages/workout";
 import Survey from "./pages/survey";
 import Settings from "./pages/settings";
@@ -28,7 +28,7 @@ class App extends Component {
             <Route path="/" element={<Onboarding />} />
             <Route path="/dashboard" element={<Dashboard username={this.state.username} />} />
             <Route path="/register" element={<Register setUsername={this.setUsername} />}/>
-            <Route path="/fitnessPlan" element={<FitnessPlan />} />
+            <Route path="/fitnessData" element={<FitnessData />} />
             <Route path="/workout" element={<Workout />} />
             <Route path="/survey" element={<Survey />} />
             <Route path="/settings" element={<Settings />} />

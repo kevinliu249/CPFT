@@ -17,9 +17,9 @@ const Dashboard = ({ username }) => {
         <p>No Pain, No Gainz! You Got This!</p>
 
         <div className="button-group"> {/* Grouped buttons for consistency */}
-          <button onClick={() => navigate("/fitnessPlan")}>Fitness Plan</button>
           <button onClick={() => navigate("/workout")}>Workout</button>
-          <button onClick={() => navigate("/survey")}>Take Survey</button>
+          <button onClick={() => navigate("/survey")}>Trainer Survey</button>
+          <button onClick={() => navigate("/fitnessData")}>Fitness Data</button>
           <button onClick={() => navigate("/settings")}>Settings</button>
         </div>
       </div>

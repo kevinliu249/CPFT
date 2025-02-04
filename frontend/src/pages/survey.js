@@ -18,14 +18,14 @@ const Survey = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log("Survey submitted:", surveyData);
-    navigate("/fitnessPlan");
+    navigate("/dashboard"); // Updated to navigate back to the dashboard
   };
 
   return (
     <div className="Survey">
       <div id="surveyContainer"> {/* Added a container to mirror Register Page */}
-        <h1>Fitness Plan Survey</h1>
-        <h3>Help us customize your workouts!</h3>
+        <h1>Training Plan Survey</h1>
+        <h3>Lets customize your workouts!</h3>
         <hr />
         <form onSubmit={handleSubmit}>
           <label htmlFor="exerciseType">Exercise Type/Goal:</label>
