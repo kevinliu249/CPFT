@@ -20,7 +20,7 @@ const Onboarding = () => {
       <img src={picture} alt="Onboarding Workout" />
       <hr />
       <h1>Cross-Platform Personal Trainer Application</h1>
-      <h3>An App to Manage all of your Workouts</h3>
+      <h3>A Daily Workout Personalized For You!</h3>
       <hr />
       <label htmlFor="username">Username:</label>
       <input type="text" id="username" name="username" /><br />
