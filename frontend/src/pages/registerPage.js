@@ -81,9 +81,9 @@ const Register = ({ setUsername }) => {
         <hr />
         {/* Wrapped Buttons to Stack Buttons Vertically */}
         <div className="button-group">
-          <button onClick={onBoardingNavigate}>Sign Up</button>
+          <button onClick={validateCreateAccount}>Sign Up</button>
         </div>
-        <h5 onClick={onBoardingNavigate}>Already have an account? Click to sign in.</h5>
+        <h5 onClick={onBoardingNavigate}>Already have an account? Click to sign in!</h5>
       </div>
 
       <ThemeToggleButton /> {/* Add the theme toggle button */}
