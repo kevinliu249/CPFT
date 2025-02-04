@@ -1,19 +1,26 @@
 .Survey {
-  margin-top: 5vh;
+  margin-top: 10vh;
   text-align: center;
   font-weight: bold;
-  padding: var(--spacing-m);
+}
+
+#surveyContainer {
+  border: 1.5px solid black;
+  width: 500px;
+  max-width: 95vw;
+  margin: 30px auto;
+  padding: 1%;
+  box-shadow: 5px 10px #888888;
   background: var(--color-background);
   color: var(--color-text);
 }
 
 .Survey h1 {
-  font-size: var(--font-size-h1);
-  margin-bottom: var(--spacing-m);
+  font-size: 3em;
 }
 
 .Survey h3 {
-  font-size: var(--font-size-h2);
+  font-size: 1.5em;
   color: var(--color-secondary);
   margin-bottom: var(--spacing-s);
 }
@@ -25,20 +32,27 @@
 }
 
 .Survey label {
-  font-size: var(--font-size-body);
-  margin-top: var(--spacing-m);
+  font-size: 1.5em;
+  margin-top: 1vh;
   display: block;
-  text-align: left;
+  text-align: center;
 }
 
 .Survey select {
-  padding: var(--spacing-s);
-  border-radius: var(--spacing-xs);
-  font-size: var(--font-size-body);
-  margin-bottom: var(--spacing-m);
-  width: 100%;
-  max-width: 300px;
-  border: 1px solid var(--color-primary);
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid #000;
+  width: 200px;
+  display: block;
+  margin: 0 auto;
+  text-align: left;
+}
+
+.button-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-m);
 }
 
 .Survey button {
@@ -56,14 +70,8 @@
   background-color: var(--color-secondary);
 }
 
-.Survey form {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.ThemeToggleButton {
-  position: fixed;
-  bottom: 20px;
-  left: 20px;
+.Survey h5 {
+  cursor: pointer;
+  color: blue;
+  text-decoration: underline;
 }
