@@ -3,12 +3,13 @@
 from flask_pymongo import PyMongo
 
 # Function to create a new user in the database
-def create_user(username, password):
+def create_user(username, password, email):
     from app import mongo
 
     user_data = {
         "username": username,
         "password": password,
+        "email": email,
     }
 
     # Insert new user document in the "users" collection in MongoDB

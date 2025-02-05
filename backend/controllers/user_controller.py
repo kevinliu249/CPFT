@@ -14,12 +14,13 @@ def register_user_route():
         # Extract user information
         username = data.get('username')
         password = data.get('password')
+        email = data.get('email')
 
-        if not username or not password:
+        if not username or not password or not email:
             return jsonify({"message": "Missing required fields"}), 400
         
         # Call the service function to register the user
-        user, error = register_user(username, password)
+        user, error = register_user(username, password, email)
 
         if error:
             return jsonify({"message": error}), 400
