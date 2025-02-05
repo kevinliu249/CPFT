@@ -21,3 +21,11 @@ def store_user_survey(user_name, fitness_goal, fitness_level, equipment_preferen
 
     # Return user survey data
     return survey_data
+
+
+def retrive_user_survey(user_name):
+    from app import mongo
+
+    survey_data = mongo.db.surveys.find_one({"user_name": user_name})
+
+    return survey_data

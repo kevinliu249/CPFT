@@ -2,6 +2,7 @@
 
 from flask import Blueprint, request, jsonify
 from services.survey_service import register_survey
+from controllers.fitness_plan_controller import fitness_plan_creation_route
 
 survey_controller = Blueprint('survey_controller', __name__)
 
@@ -24,11 +25,15 @@ def register_survey_route():
         # Call the service function to register the survey
         survey, error = register_survey(user_name, fitness_goal, fitness_level, equipment_preference)
 
+
+        # Calling the function to trigger fitness plan creation
+        fitness_plan_creation_route() 
+
         if error:
             return jsonify({"message": error}), 400
         
         # If survey collection is successful, return survey data
-        return jsonify({"message": "Survey registered successfully", "survey": survey}), 201
+        return jsonify({"message": "Survey registered successfully", "survey": survey,}), 201
 
     except Exception as e:
         return jsonify({"message": "Internal server error", "error": str(e)}), 500
