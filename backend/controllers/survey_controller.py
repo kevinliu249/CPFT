@@ -32,3 +32,4 @@ def register_survey_route():
 
     except Exception as e:
         return jsonify({"message": "Internal server error", "error": str(e)}), 500
+    
