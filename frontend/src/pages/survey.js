@@ -15,10 +15,35 @@ const Survey = () => {
     setSurveyData({ ...surveyData, [name]: value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Survey submitted:", surveyData);
-    navigate("/dashboard"); // Updated to navigate back to the dashboard
+    
+    const surveyPayload = {
+      user_name: "test_user",  // Replace this with actual logged-in user data
+      fitness_goal: surveyData.exerciseType,
+      fitness_level: surveyData.fitnessLevel,
+      equipment_preference: surveyData.equipmentPreference,
+    };
+  
+    try {
+      const response = await fetch("http://localhost:5000/survey", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(surveyPayload),
+      });
+  
+      const data = await response.json();
+      if (response.ok) {
+        console.log("Survey submitted successfully:", data);
+        navigate("/dashboard"); // Redirect user upon successful submission
+      } else {
+        console.error("Error submitting survey:", data.message);
+      }
+    } catch (error) {
+      console.error("Request failed:", error);
+    }
   };
 
   return (
