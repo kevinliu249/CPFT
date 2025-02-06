@@ -109,9 +109,6 @@ const Register = ({ setUsername }) => {
         </div>
         <h5 onClick={onBoardingNavigate}>Already have an account? Click to sign in!</h5>
       </div>
-
-      <ThemeToggleButton /> {/* Add the theme toggle button */}
-      
     </div>
   );
 }
