@@ -9,7 +9,6 @@ mongo = PyMongo(app)
 app.config["JWT_SECRET_KEY"] = "supersecret"
 jwt = JWTManager(app)
 
-# Retrieve a Fitness Plan by Username
 @app.route("/api/workouts/<username>", methods=["GET"])
 @jwt_required()
 def get_fitness_plan(username):
@@ -18,7 +17,6 @@ def get_fitness_plan(username):
         return jsonify({"message": "Fitness plan not found"}), 404
     return jsonify(fitness_plan), 200
 
-# Create a Fitness Plan
 @app.route("/api/workouts", methods=["POST"])
 @jwt_required()
 def create_fitness_plan():
