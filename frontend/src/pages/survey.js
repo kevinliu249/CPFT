@@ -2,6 +2,27 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../styles/Survey.css";
 
+const selectOptions = {
+  exerciseType: [
+    { value: "", label: "Select" },
+    { value: "muscle_mass", label: "Muscle Mass" },
+    { value: "cardio_endurance", label: "Cardio/Endurance" },
+    { value: "flexibility", label: "Flexibility" },
+  ],
+  equipmentPreference: [
+    { value: "", label: "Select" },
+    { value: "bodyweight", label: "Bodyweight" },
+    { value: "weights", label: "Weights" },
+    { value: "none", label: "None" },
+  ],
+  fitnessLevel: [
+    { value: "", label: "Select" },
+    { value: "beginner", label: "Beginner" },
+    { value: "intermediate", label: "Intermediate" },
+    { value: "advanced", label: "Advanced" },
+  ],
+};
+
 const Survey = () => {
   const navigate = useNavigate();
   const [surveyData, setSurveyData] = useState({
@@ -10,34 +31,31 @@ const Survey = () => {
     fitnessLevel: "",
   });
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setSurveyData({ ...surveyData, [name]: value });
+  const handleChange = ({ target: { name, value } }) => {
+    setSurveyData((prevData) => ({ ...prevData, [name]: value }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     const surveyPayload = {
-      user_name: "test_user",  // Replace this with actual logged-in user data
+      user_name: "test_user", // Replace this with actual logged-in user data
       fitness_goal: surveyData.exerciseType,
       fitness_level: surveyData.fitnessLevel,
       equipment_preference: surveyData.equipmentPreference,
     };
-  
+
     try {
       const response = await fetch("http://localhost:5000/survey", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(surveyPayload),
       });
-  
+
       const data = await response.json();
       if (response.ok) {
         console.log("Survey submitted successfully:", data);
-        navigate("/dashboard"); // Redirect user upon successful submission
+        navigate("/dashboard");
       } else {
         console.error("Error submitting survey:", data.message);
       }
@@ -48,9 +66,9 @@ const Survey = () => {
 
   return (
     <div className="Survey">
-      <div id="surveyContainer"> {/* Added a container to mirror Register Page */}
+      <div id="surveyContainer">
         <h1>Training Plan Survey</h1>
-        <h3>Lets customize your workouts!</h3>
+        <h3>Let's customize your workouts!</h3>
         <hr />
         <form onSubmit={handleSubmit}>
           <label htmlFor="exerciseType">Exercise Type/Goal:</label>
@@ -61,10 +79,11 @@ const Survey = () => {
             onChange={handleChange}
             required
           >
-            <option value="">Select</option>
-            <option value="muscle_mass">Muscle Mass</option>
-            <option value="cardio_endurance">Cardio/Endurance</option>
-            <option value="flexibility">Flexibility</option>
+            {selectOptions.exerciseType.map((opt) => (
+              <option key={opt.value} value={opt.value}>
+                {opt.label}
+              </option>
+            ))}
           </select>
 
           <label htmlFor="equipmentPreference">Equipment Preference:</label>
@@ -75,10 +94,11 @@ const Survey = () => {
             onChange={handleChange}
             required
           >
-            <option value="">Select</option>
-            <option value="bodyweight">Bodyweight</option>
-            <option value="weights">Weights</option>
-            <option value="none">None</option>
+            {selectOptions.equipmentPreference.map((opt) => (
+              <option key={opt.value} value={opt.value}>
+                {opt.label}
+              </option>
+            ))}
           </select>
 
           <label htmlFor="fitnessLevel">Fitness Level:</label>
@@ -89,13 +109,14 @@ const Survey = () => {
             onChange={handleChange}
             required
           >
-            <option value="">Select</option>
-            <option value="beginner">Beginner</option>
-            <option value="intermediate">Intermediate</option>
-            <option value="advanced">Advanced</option>
+            {selectOptions.fitnessLevel.map((opt) => (
+              <option key={opt.value} value={opt.value}>
+                {opt.label}
+              </option>
+            ))}
           </select>
 
-          <div className="button-group"> {/* Wrapped buttons for consistent design */}
+          <div className="button-group">
             <button type="submit">Submit Survey</button>
           </div>
         </form>
