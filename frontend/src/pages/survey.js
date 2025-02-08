@@ -14,7 +14,7 @@ const selectOptions = {
   equipmentPreference: [
     { value: "", label: "Select" },
     { value: "bodyweight", label: "Bodyweight" },
-    { value: "weights", label: "Weights" },
+    { value: "weights", label: "Weights / Machines" },
     { value: "none", label: "None" },
   ],
   fitnessLevel: [
