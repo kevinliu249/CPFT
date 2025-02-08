@@ -10,11 +10,11 @@ from flask_pymongo import PyMongo
 def filter_exercises(exercises_data, fitness_goal, equipment_preference):
 
     # For Cardio/ Endurance as Exercise Type/ Goal
-    if fitness_goal == "Cardio/Endurance":
+    if fitness_goal == "cardio_endurance":
         exercise_target = "cardiovascular system"
-        if equipment_preference == "Body Weight":
+        if equipment_preference == "bodyweight":
             exercise_equipment = ["body weight"]
-        elif equipment_preference == "Weights/ Machines":
+        elif equipment_preference == "weights":
             exercise_equipment = ["leverage machine", "dumbbell", "stationary bike", "elliptical machine", "stepmill machine"]
         else:
             exercise_equipment = ["body weight", "leverage machine", "dumbbell", "stationary bike", "elliptical machine", "stepmill machine"]
@@ -27,13 +27,13 @@ def filter_exercises(exercises_data, fitness_goal, equipment_preference):
 
 
     # For Muscle Mass as Exercise Type/ Goal
-    elif fitness_goal == "Muscle Mass":
+    elif fitness_goal == "muscle_mass":
         exercise_target = ["abductors", "abs", "adductors", "biceps", "calves", "delts", "glutes", "hamstrings", "lats", "pectorals", "quads", "traps", "triceps", "upper back"]
-        if equipment_preference == "Body Weight":
+        if equipment_preference == "bodyweight":
             equipment = ["body weight"]
-        elif equipment_preference == "Weights/ Machines":
+        elif equipment_preference == "weights":
             equipment = ["barbell", "cable", "dumbbell", "ez barbell", "kettlebell", "smith machine"]
-        elif equipment_preference == "None":
+        elif equipment_preference == "none":
             equipment = ["body weight", "medicine ball", "barbell", "cable", "dumbbell", "ez barbell", "kettlebell", "smith machine"]
 
         filtered_exercises = [
@@ -44,7 +44,7 @@ def filter_exercises(exercises_data, fitness_goal, equipment_preference):
     ]
 
     # For Flexibility as Exercise Type/ Goal:
-    elif fitness_goal == "Flexibility":
+    elif fitness_goal == "flexibility":
         equipment = ["body weight"]
         filtered_exercises = [
         exercise for exercise in exercises_data
