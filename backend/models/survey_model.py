@@ -1,5 +1,6 @@
 # Logic for user survey, interacts with model
 
+from flask import jsonify
 from flask_pymongo import PyMongo
 
 # Function to store user survey in the database
@@ -23,7 +24,7 @@ def store_user_survey(user_name, fitness_goal, fitness_level, equipment_preferen
     return survey_data
 
 
-def retrive_user_survey(user_name):
+def retrieve_user_survey(user_name):
     from app import mongo
 
     survey_data = mongo.db.surveys.find_one({"user_name": user_name})

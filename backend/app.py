@@ -6,6 +6,7 @@ from flask_cors import CORS
 from controllers.user_controller import user_controller
 from controllers.survey_controller import survey_controller
 from controllers.fitness_plan_controller import fitness_plan_controller
+from controllers.workout_controller import workout_controller
 from config import Config
 
 app = Flask(__name__)
@@ -22,6 +23,7 @@ mongo = PyMongo(app)
 app.register_blueprint(user_controller)
 app.register_blueprint(survey_controller)
 app.register_blueprint(fitness_plan_controller)
+app.register_blueprint(workout_controller)
 
 if __name__ == '__main__':
     app.run(debug=True)
