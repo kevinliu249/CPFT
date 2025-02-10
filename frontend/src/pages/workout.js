@@ -4,19 +4,22 @@ import "../styles/Workout.css";
 
 const Workout = () => {
   const navigate = useNavigate();
-  const [workouts, setWorkouts] = useState([]);
+  const [workout, setWorkouts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchWorkouts = async () => {
+      const username = "test_user"; // Replace with actual username, e.g., from localStorage
+
       try {
-        const response = await fetch("http://localhost:5000/api/workouts");
+        const response = await fetch(`http://localhost:5000/workout?username=${username}`);
         if (!response.ok) {
           throw new Error("Failed to fetch workouts");
         }
         const data = await response.json();
-        setWorkouts(data.workouts);
+        console.log('Fetched data:', data);  // Log the response data
+        setWorkouts(Array.isArray(data.workout) ? data.workout : []);
       } catch (error) {
         setError(error.message);
       } finally {
@@ -36,10 +39,10 @@ const Workout = () => {
         <h1>Today's Workout</h1>
         <hr />
         <div className="workout-list">
-          {workouts.length === 0 ? (
+        {Array.isArray(workout) && workout.length === 0 ? (
             <p>No workouts available.</p>
           ) : (
-            workouts.map((workout) => (
+            workout.map((workout) => (
               <div key={workout.id} className="workout-card">
                 <h2>{workout.name}</h2>
                 <p><strong>Target:</strong> {workout.target}</p>
