@@ -37,12 +37,12 @@ const Register = ({ setUsername }) => {
   }
 
   const sendData = async () => {
-    // The following code sends an array of [Email, Username, Password] to the Backend
+    // The following code sends an array of user entered [Email, Username, Password] to the Backend
     // Backend should return True if the account was created
     // Otherwise it should return False if the email is already registered
     const accountData = [document.getElementById("email").value, document.getElementById("username").value, document.getElementById("password1").value];
     try {
-      const response = await fetch("http://localhost:3000/backend", {
+      const response = await fetch("http://localhost:3000/registering", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -76,11 +76,11 @@ const Register = ({ setUsername }) => {
       return
     }
     if (!document.getElementById("username").value) {
-      errorDisplay(" Nothing entered in username field!");
+      errorDisplay("Please enter a valid username.");
       return
     }
-    if (!document.getElementById("email").value) {
-      errorDisplay(" Nothing entered in email field!");
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(document.getElementById("email").value)) {
+      errorDisplay("Please enter a valid email.");
       return
     }
     sendData();
