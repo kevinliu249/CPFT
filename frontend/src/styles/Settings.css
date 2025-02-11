@@ -1,10 +1,10 @@
-.Dashboard {
+.Settings {
     margin-top: 10vh;
     text-align: center;
     font-weight: bold;
   }
   
-  #dashboardContainer {
+  #settingsContainer {
     border: 1.5px solid black;
     width: 500px;
     max-width: 95vw;
@@ -15,34 +15,24 @@
     color: var(--color-text);
   }
   
-  .Dashboard h1 {
+  .Settings h1 {
     font-size: 3em;
   }
   
-  .Dashboard h2 {
-    font-size: 2em;
-    color: var(--color-secondary);
-  }
-  
-  .Dashboard hr {
+  .Settings hr {
     width: 75%;
     margin-top: 20px;
     max-width: 500px;
   }
   
-  .Dashboard p {
-    font-size: 1.2em;
-    margin-top: var(--spacing-m);
+  .Settings label {
+    font-size: 1.5em;
+    margin-top: 1vh;
+    display: block;
+    text-align: center;
   }
   
-  .button-group {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: var(--spacing-m);
-  }
-  
-  .Dashboard button {
+  .Settings button {
     background-color: var(--color-primary);
     color: white;
     border: none;
@@ -51,10 +41,15 @@
     border-radius: var(--spacing-xs);
     margin-top: var(--spacing-m);
     cursor: pointer;
-    width: 80%;
   }
   
-  .Dashboard button:hover {
+  .Settings button:hover {
     background-color: var(--color-secondary);
+  }
+  
+  .Settings h5 {
+    cursor: pointer;
+    color: blue;
+    text-decoration: underline;
   }
   

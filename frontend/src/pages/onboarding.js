@@ -66,7 +66,7 @@ const Onboarding = ({ setLogin }) => {
       <img src={picture} alt="Onboarding Workout" />
       <hr />
       <h1>Cross-Platform Personal Trainer Application</h1>
-      <h3>An App to Manage all of your Workouts</h3>
+      <h3>A Daily Workout Personalized For You!</h3>
       <hr />
       <span id="errorMessage">Invalid Email or Password!</span>
       <label htmlFor="email">Email:</label>
