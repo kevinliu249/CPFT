@@ -12,20 +12,25 @@ import Settings from "./pages/settings";
 class App extends Component {
 
   state = {
-    username: "User1234"
+    username: "User1234",
+    userData: ""
   }
 
   setUsername = (newUsername) => {
     this.setState({ username: newUsername });
-    console.log("3", this.state.username);
   };
+
+  setLogin = (username, userData) => {
+    this.setState({ username: username});
+    this.setState({ userData: userData});
+  }
 
   render() {
     return (
       <Router>
         <div className="App">
           <Routes>
-            <Route path="/" element={<Onboarding />} />
+            <Route path="/" element={<Onboarding setLogin={this.setLogin}/>} />
             <Route path="/dashboard" element={<Dashboard username={this.state.username} />} />
             <Route path="/register" element={<Register setUsername={this.setUsername} />}/>
             <Route path="/fitnessData" element={<FitnessData />} />

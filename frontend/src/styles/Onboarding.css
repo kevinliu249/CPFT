@@ -1,5 +1,5 @@
 .Onboarding {
-  margin-top: 5vh;
+  margin-top: 1vh;
   text-align: center;
   font-weight: bold;
 }
@@ -17,9 +17,14 @@
 
 .Onboarding label {
   font-size: 1.5em;
-  margin-top: 3vh;
+  margin-top: 1vh;
   display: block;
   text-align: center;
+}
+
+.Onboarding #errorMessage {
+  color: red;
+  display: none;
 }
 
 .Onboarding input {
