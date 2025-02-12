@@ -23,7 +23,7 @@ const Onboarding = ({ setLogin }) => {
   }
 
   const validateLogin = async () => {
-    if (!document.getElementById("email").value || !document.getElementById("password").password) {
+    if (!document.getElementById("email").value || !document.getElementById("password").value) {
       error();
       return
     }
@@ -40,7 +40,6 @@ const Onboarding = ({ setLogin }) => {
         body: JSON.stringify(accountData),
       });
       if (!response.ok) {
-        error();
         throw new Error("There was a problem reaching the Backend");
       }
       // Got a response from backend
@@ -53,10 +52,9 @@ const Onboarding = ({ setLogin }) => {
         // setLogin( fetched Username, fetched user Workout Cards );
         navigate("/dashboard");
       } else {
-        error();
+        throw new Error("There was a problem reaching the Backend");
       }
     } catch (error) {
-      error();
       console.log(`Error: ${error.message}`);
     }
   }

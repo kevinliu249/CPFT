@@ -49,6 +49,7 @@ const Register = ({ setUsername }) => {
         },
         body: JSON.stringify(accountData),
       });
+      console.log(accountData)
       if (!response.ok) {
         errorDisplay("There was a problem reaching the Backend");
         throw new Error("There was a problem reaching the Backend");
