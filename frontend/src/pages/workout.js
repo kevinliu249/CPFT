@@ -65,6 +65,23 @@ const Workout = ({ username }) => {
     return string.join("");
   }
 
+  // Handle changes in input fields
+  const handleInputChange = (index, field, value) => {
+    setCompletedInputs((prev) => ({
+      ...prev,
+      [index]: {
+        ...prev[index],
+        [field]: value,
+      },
+    }));
+  };
+
+  // Submit completed workout data
+  const handleSubmitWorkout = () => {
+    console.log("Completed workout data:", completedInputs);
+    alert("Workout data submitted! Check console for details.");
+  };
+
   // Display loading or error messages as necessary
   if (loading) return <p>Loading workouts...</p>;
   if (error) return <p>Error: {error}</p>;
