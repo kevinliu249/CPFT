@@ -12,7 +12,7 @@ import Settings from "./pages/settings";
 class App extends Component {
 
   state = {
-    username: "User1234",
+    username: "test_user",
     userData: ""
   }
 
@@ -34,7 +34,7 @@ class App extends Component {
             <Route path="/dashboard" element={<Dashboard username={this.state.username} />} />
             <Route path="/register" element={<Register setUsername={this.setUsername} />}/>
             <Route path="/fitnessData" element={<FitnessData />} />
-            <Route path="/workout" element={<Workout />} />
+            <Route path="/workout" element={<Workout username={this.state.username}/>} />
             <Route path="/survey" element={<Survey />} />
             <Route path="/settings" element={<Settings />} />
           </Routes>

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../styles/Workout.css";
 
-const Workout = () => {
+const Workout = ({ username }) => {
   const navigate = useNavigate();
   // State to store fetched workouts
   const [workouts, setWorkouts] = useState([]);
@@ -15,8 +15,6 @@ const Workout = () => {
   // Fetch workouts on mount
   useEffect(() => {
     const fetchWorkouts = async () => {
-      const username = "test_user"; // Replace with actual username, e.g., from localStorage
-
       try {
         // Fetch workout data for the user
         const response = await fetch(`http://localhost:5000/workout?username=${username}`);
@@ -37,7 +35,35 @@ const Workout = () => {
     };
 
     fetchWorkouts();
-  }, []);
+  }, [username]);
+
+  // Handle changes in input fields
+  const handleInputChange = (index, field, value) => {
+    setCompletedInputs((prev) => ({
+      ...prev,
+      [index]: {
+        ...prev[index],
+        [field]: value,
+      },
+    }));
+  };
+
+  // Submit completed workout data
+  const handleSubmitWorkout = () => {
+    console.log("Completed workout data:", completedInputs);
+    alert("Workout data submitted! Check console for details.");
+  };
+
+  const capitalize = (str) => {
+    // Function to properly capitalize the first letter of each word in a string
+    let string = str.split("");
+    for (let i = 0; i < string.length - 1; i++) {
+      if (string[i - 1] === " " || i === 0) {
+        string[i] = string[i].toUpperCase()
+      }
+    }
+    return string.join("");
+  }
 
   // Handle changes in input fields
   const handleInputChange = (index, field, value) => {
@@ -72,9 +98,9 @@ const Workout = () => {
           ) : (
             workouts.map((workout, index) => (
               <div key={index} className="workout-card">
-                <h2>{workout.name}</h2>
+                <h2>{capitalize(workout.name)}</h2>
                 <p>
-                  <strong>Target:</strong> {workout.target}
+                  <strong>Target:</strong> {capitalize(workout.target)}
                 </p>
                 <p>
                   <strong>Intensity:</strong> {workout.Intensity}
