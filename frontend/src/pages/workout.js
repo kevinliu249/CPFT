@@ -55,34 +55,11 @@ const Workout = ({ username }) => {
   };
 
   const capitalize = (str) => {
-    // Function to properly capitalize the first letter of each word in a string
-    let string = str.split("");
-    for (let i = 0; i < string.length - 1; i++) {
-      if (string[i - 1] === " " || i === 0) {
-        string[i] = string[i].toUpperCase()
-      }
-    }
-    return string.join("");
-  }
-
-  // Handle changes in input fields
-  const handleInputChange = (index, field, value) => {
-    setCompletedInputs((prev) => ({
-      ...prev,
-      [index]: {
-        ...prev[index],
-        [field]: value,
-      },
-    }));
+    return str
+      .split(" ")
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(" ");
   };
-
-  // Submit completed workout data
-  const handleSubmitWorkout = () => {
-    console.log("Completed workout data:", completedInputs);
-    alert("Workout data submitted! Check console for details.");
-  };
-
-  // Display loading or error messages as necessary
   if (loading) return <p>Loading workouts...</p>;
   if (error) return <p>Error: {error}</p>;
 
