@@ -52,13 +52,12 @@ const Workout = ({ username }) => {
 
   // Capitalize function to format text properly
   const capitalize = (str) => {
-    return str
-      .split(" ")
-      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-      .join(" ");
-  };
-
-  // Display loading or error messages
+const capitalize = (str) => {
+  return str
+    .split(" ")
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(" ");
+};
   if (loading) return <p>Loading workouts...</p>;
   if (error) return <p>Error: {error}</p>;
 
