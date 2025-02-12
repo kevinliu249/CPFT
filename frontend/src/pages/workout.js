@@ -4,32 +4,28 @@ import "../styles/Workout.css";
 
 const Workout = ({ username }) => {
   const navigate = useNavigate();
-  // State to store fetched workouts
+
+  // State for fetched workouts
   const [workouts, setWorkouts] = useState([]);
-  // Loading and error state for fetch operation
+  // Loading and error states
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  // State to track the user's input for completed workout metrics
+  // State for user input
   const [completedInputs, setCompletedInputs] = useState({});
 
-  // Fetch workouts on mount
+  // Fetch workouts on component mount
   useEffect(() => {
     const fetchWorkouts = async () => {
       try {
-        // Fetch workout data for the user
         const response = await fetch(`http://localhost:5000/workout?username=${username}`);
-        if (!response.ok) {
-          throw new Error("Failed to fetch workouts");
-        }
+        if (!response.ok) throw new Error("Failed to fetch workouts");
+
         const data = await response.json();
         console.log("Fetched data:", data);
-        // Set the workouts state with the data returned from the backend
         setWorkouts(Array.isArray(data.workout) ? data.workout : []);
       } catch (error) {
-        // Update error state if there's a problem fetching data
         setError(error.message);
       } finally {
-        // Once fetch is complete, update the loading state
         setLoading(false);
       }
     };
@@ -37,7 +33,7 @@ const Workout = ({ username }) => {
     fetchWorkouts();
   }, [username]);
 
-  // Handle changes in input fields
+  // Handle user input changes
   const handleInputChange = (index, field, value) => {
     setCompletedInputs((prev) => ({
       ...prev,
@@ -48,78 +44,43 @@ const Workout = ({ username }) => {
     }));
   };
 
-  // Submit completed workout data
+  // Handle form submission
   const handleSubmitWorkout = () => {
     console.log("Completed workout data:", completedInputs);
     alert("Workout data submitted! Check console for details.");
   };
 
+  // Capitalize function to format text properly
   const capitalize = (str) => {
-    // Function to properly capitalize the first letter of each word in a string
-    let string = str.split("");
-    for (let i = 0; i < string.length - 1; i++) {
-      if (string[i - 1] === " " || i === 0) {
-        string[i] = string[i].toUpperCase()
-      }
-    }
-    return string.join("");
-  }
-
-  // Handle changes in input fields
-  const handleInputChange = (index, field, value) => {
-    setCompletedInputs((prev) => ({
-      ...prev,
-      [index]: {
-        ...prev[index],
-        [field]: value,
-      },
-    }));
+    return str
+      .split(" ")
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(" ");
   };
 
-  // Submit completed workout data
-  const handleSubmitWorkout = () => {
-    console.log("Completed workout data:", completedInputs);
-    alert("Workout data submitted! Check console for details.");
-  };
-
-  // Display loading or error messages as necessary
+  // Display loading or error messages
   if (loading) return <p>Loading workouts...</p>;
   if (error) return <p>Error: {error}</p>;
 
   return (
     <div className="Workout">
-      {/* Container is now more flexible with updated CSS */}
       <div id="workoutContainer">
         <h1>Today's Workout</h1>
         <hr />
         <div className="workout-list">
-          {Array.isArray(workouts) && workouts.length === 0 ? (
+          {workouts.length === 0 ? (
             <p>No workouts available.</p>
           ) : (
             workouts.map((workout, index) => (
               <div key={index} className="workout-card">
                 <h2>{capitalize(workout.name)}</h2>
-                <p>
-                  <strong>Target:</strong> {capitalize(workout.target)}
-                </p>
-                <p>
-                  <strong>Intensity:</strong> {workout.Intensity}
-                </p>
-                <p>
-                  <strong>Weight:</strong> {workout.Weight}
-                </p>
-                <p>
-                  <strong>Reps:</strong> {workout.Reps}
-                </p>
-                <p>
-                  <strong>Time:</strong> {workout.Time}
-                </p>
+                <p><strong>Target:</strong> {capitalize(workout.target)}</p>
+                <p><strong>Intensity:</strong> {workout.Intensity}</p>
+                <p><strong>Weight:</strong> {workout.Weight}</p>
+                <p><strong>Reps:</strong> {workout.Reps}</p>
+                <p><strong>Time:</strong> {workout.Time}</p>
                 {workout.gifUrl && (
-                  <img
-                    src={workout.gifUrl}
-                    alt={workout.name}
-                    className="workout-image"
-                  />
+                  <img src={workout.gifUrl} alt={workout.name} className="workout-image" />
                 )}
                 {workout.instructions && (
                   <ul>
@@ -129,15 +90,10 @@ const Workout = ({ username }) => {
                   </ul>
                 )}
                 {workout.videoUrl && (
-                  <a
-                    href={workout.videoUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
+                  <a href={workout.videoUrl} target="_blank" rel="noopener noreferrer">
                     Watch Video
                   </a>
                 )}
-
                 <div className="workout-inputs">
                   {workout.Reps !== "N/A" ? (
                     <>
