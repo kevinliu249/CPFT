@@ -12,7 +12,7 @@ const Workout = () => {
   // State to track the user's input for completed workout metrics
   const [completedInputs, setCompletedInputs] = useState({});
 
-  // useEffect fetches the workouts from the backend on component mount
+  // Fetch workouts on mount
   useEffect(() => {
     const fetchWorkouts = async () => {
       const username = "test_user"; // Replace with actual username, e.g., from localStorage
@@ -39,9 +39,9 @@ const Workout = () => {
     fetchWorkouts();
   }, []);
 
-  // Function to handle input changes for each workout's completed metrics
+  // Handle changes in input fields
   const handleInputChange = (index, field, value) => {
-    setCompletedInputs(prev => ({
+    setCompletedInputs((prev) => ({
       ...prev,
       [index]: {
         ...prev[index],
@@ -50,9 +50,8 @@ const Workout = () => {
     }));
   };
 
-  // Function to handle the submission of completed workout data
+  // Submit completed workout data
   const handleSubmitWorkout = () => {
-    // Currently logs the completed inputs; later integrate with backend endpoint
     console.log("Completed workout data:", completedInputs);
     alert("Workout data submitted! Check console for details.");
   };
@@ -63,6 +62,7 @@ const Workout = () => {
 
   return (
     <div className="Workout">
+      {/* Container is now more flexible with updated CSS */}
       <div id="workoutContainer">
         <h1>Today's Workout</h1>
         <hr />
@@ -70,10 +70,8 @@ const Workout = () => {
           {Array.isArray(workouts) && workouts.length === 0 ? (
             <p>No workouts available.</p>
           ) : (
-            // Map through each workout and render its details along with inputs for completed metrics
             workouts.map((workout, index) => (
               <div key={index} className="workout-card">
-                {/* Display workout details */}
                 <h2>{workout.name}</h2>
                 <p>
                   <strong>Target:</strong> {workout.target}
@@ -91,7 +89,11 @@ const Workout = () => {
                   <strong>Time:</strong> {workout.Time}
                 </p>
                 {workout.gifUrl && (
-                  <img src={workout.gifUrl} alt={workout.name} className="workout-image" />
+                  <img
+                    src={workout.gifUrl}
+                    alt={workout.name}
+                    className="workout-image"
+                  />
                 )}
                 {workout.instructions && (
                   <ul>
@@ -101,16 +103,18 @@ const Workout = () => {
                   </ul>
                 )}
                 {workout.videoUrl && (
-                  <a href={workout.videoUrl} target="_blank" rel="noopener noreferrer">
+                  <a
+                    href={workout.videoUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
                     Watch Video
                   </a>
                 )}
-                {/* Section for user to input completed workout metrics */}
+
                 <div className="workout-inputs">
                   {workout.Reps !== "N/A" ? (
-                    // For strength or flexibility workouts: display inputs for sets, reps, and weight (if applicable)
                     <>
-                      {/* Input for completed sets */}
                       <label>Completed Sets:</label>
                       <input
                         type="number"
@@ -119,7 +123,6 @@ const Workout = () => {
                         value={completedInputs[index]?.sets || ""}
                         onChange={(e) => handleInputChange(index, "sets", e.target.value)}
                       />
-                      {/* Input for completed reps */}
                       <label>Completed Reps:</label>
                       <input
                         type="number"
@@ -128,7 +131,6 @@ const Workout = () => {
                         value={completedInputs[index]?.reps || ""}
                         onChange={(e) => handleInputChange(index, "reps", e.target.value)}
                       />
-                      {/* If a weight is applicable, display an input for completed weight */}
                       {workout.Weight !== "N/A" && (
                         <>
                           <label>Completed Weight:</label>
@@ -143,7 +145,6 @@ const Workout = () => {
                       )}
                     </>
                   ) : (
-                    // For cardio workouts (where reps are "N/A"): display an input for time in minutes
                     <>
                       <label>Completed Time (minutes):</label>
                       <input
@@ -161,11 +162,9 @@ const Workout = () => {
           )}
         </div>
         <hr />
-        {/* Button to submit completed workout data */}
         <button onClick={handleSubmitWorkout} className="submit-workout-button">
           Submit Completed Workout
         </button>
-        {/* Button to navigate back to the dashboard */}
         <button onClick={() => navigate("/dashboard")} className="workout-back-button">
           Back to Dashboard
         </button>
