@@ -3,8 +3,13 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import '../styles/App.css';
 import '../styles/Register.css';
+import avatar1 from "../images/avatar1.png";
+import avatar2 from "../images/avatar2.png";
+import avatar3 from "../images/avatar3.png";
+import avatar4 from "../images/avatar4.png";
 
 const Register = ({ setUsername }) => {
+  let avatarSelection = 1;
   const [setResponseData] = useState(null);
 
   const navigate = useNavigate();
@@ -37,10 +42,10 @@ const Register = ({ setUsername }) => {
   }
 
   const sendData = async () => {
-    // The following code sends an array of user entered [Email, Username, Password] to the Backend
+    // The following code sends an array of user entered [Email, Username, Password, Avatar Image Number] to the Backend
     // Backend should return True if the account was created
     // Otherwise it should return False if the email is already registered
-    const accountData = [document.getElementById("email").value, document.getElementById("username").value, document.getElementById("password1").value];
+    const accountData = [document.getElementById("email").value, document.getElementById("username").value, document.getElementById("password1").value, avatarSelection];
     try {
       const response = await fetch("http://localhost:3000/registering", {
         method: "POST",
@@ -87,6 +92,15 @@ const Register = ({ setUsername }) => {
     sendData();
   };
 
+  const selectAvatar = (number) => {
+    // Changes the class names on avatar image divs to showcase which is currently selected
+    avatarSelection = number;
+    for (let i = 1; i < document.getElementById("avatar-Container").getElementsByTagName("div").length + 1; i++) {
+      document.getElementById("image" + i).className = "";
+    }
+    document.getElementById("image" + number).className = "selected";
+  }
+
   return (
     <div className="Register">
       <div id="registercontainer">
@@ -104,6 +118,14 @@ const Register = ({ setUsername }) => {
         <input type="password" id="password1" name="password1" /><br />
         <label htmlFor="password">Re-Type Password:</label>
         <input type="password" id="password2" name="password2" /><br />
+
+        <label htmlFor="avatar">Select Avatar:</label>
+        <div id="avatar-Container">
+          <div id="image1" className="selected" onClick={() => selectAvatar(1)}><img src={avatar1} alt="Avatar 1"></img></div>
+          <div id="image2"                      onClick={() => selectAvatar(2)}><img src={avatar2} alt="Avatar 2"></img></div>
+          <div id="image3"                      onClick={() => selectAvatar(3)}><img src={avatar3} alt="Avatar 3"></img></div>
+          <div id="image4"                      onClick={() => selectAvatar(4)}><img src={avatar4} alt="Avatar 4"></img></div>
+        </div>
         <hr />
         <div className="button-group">
           <button onClick={validateCreateAccount}>Sign Up</button>

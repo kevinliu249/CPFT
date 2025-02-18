@@ -28,11 +28,6 @@
   display: none;
 }
 
-.Register img {
-  width: 50%;
-  max-width: 300px;
-}
-
 .Register hr {
   width: 75%;
   margin-top: 20px;
@@ -84,6 +79,36 @@
   cursor: pointer;
   color: blue;
   text-decoration: underline;
+}
+
+.Register #avatar-Container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center; 
+  gap: 20px; 
+  padding: 10px;
+}
+
+.Register #avatar-Container div {
+  border: 1px solid black;
+  padding: 5px;
+  margin: 5px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.Register .selected {
+  background-color: blue;
+  border: 3px solid rgb(139, 139, 139) !important;
+  transform: scale(1.2);
+  box-shadow: 0 0 10px rgba(128, 0, 128, 0.7);
+  border-radius: 10px;
+}
+
+.Register #avatar-Container img {
+  width: 60%;
+  border-radius: 20px;
+  min-width: 70px;
 }
 
 .button-group {

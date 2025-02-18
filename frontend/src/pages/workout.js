@@ -72,11 +72,13 @@ const Workout = ({ username }) => {
             workouts.map((workout, index) => (
               <div key={index} className="workout-card">
                 <h2>{capitalize(workout.name)}</h2>
-                <p><strong>Target:</strong> {capitalize(workout.target)}</p>
-                <p><strong>Intensity:</strong> {workout.Intensity}</p>
-                <p><strong>Weight:</strong> {workout.Weight}</p>
-                <p><strong>Reps:</strong> {workout.Reps}</p>
-                <p><strong>Time:</strong> {workout.Time}</p>
+                <div className="workout-info">
+                  <p><strong>Target:</strong> {capitalize(workout.target)}</p>
+                  <p><strong>Intensity:</strong> {workout.Intensity}</p>
+                  <p><strong>Weight:</strong> {workout.Weight}</p>
+                  <p><strong>Reps:</strong> {workout.Reps}</p>
+                  <p><strong>Time:</strong> {workout.Time}</p>
+                </div>
                 {workout.gifUrl && (
                   <img src={workout.gifUrl} alt={workout.name} className="workout-image" />
                 )}
