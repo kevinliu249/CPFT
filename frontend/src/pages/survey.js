@@ -25,7 +25,8 @@ const selectOptions = {
   ],
 };
 
-const Survey = () => {
+// Now the Survey component accepts a dynamic username as a prop.
+const Survey = ({ username }) => {
   // useNavigate hook used for navigation between routes.
   const navigate = useNavigate();
 
@@ -47,8 +48,9 @@ const Survey = () => {
     e.preventDefault(); // Prevent the default form submission behavior.
 
     // Prepare the payload to be sent to the backend.
+    // Replace the hard-coded "test_user" with the dynamic username passed in as a prop.
     const surveyPayload = {
-      user_name: "test_user", // To Be Done: Replace with actual logged-in user data when available.
+      user_name: username, // Dynamic username from props.
       fitness_goal: surveyData.exerciseType,
       fitness_level: surveyData.fitnessLevel,
       equipment_preference: surveyData.equipmentPreference,
@@ -84,6 +86,8 @@ const Survey = () => {
         {/* Survey Heading */}
         <h1>Training Plan Survey</h1>
         <h3>Let's customize your workouts!</h3>
+        {/* Display the logged-in username dynamically if available */}
+        {username && <p>Logged in as: {username}</p>}
         <hr />
         <form onSubmit={handleSubmit}>
           {/* Dropdown for selecting Exercise Type/Goal */}
