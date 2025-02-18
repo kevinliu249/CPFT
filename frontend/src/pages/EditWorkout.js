@@ -1,43 +1,58 @@
+// EditWorkout.js
 import React, { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import { GlobalStateContext } from "../context/GlobalStateContext"; // global context
-import "../styles/App.css";    
-import "../styles/Dashboard.css"; 
+import { GlobalStateContext } from "../context/GlobalStateContext"; 
+import "../styles/App.css";     
+import "../styles/Workout.css"; 
 
 const EditWorkout = ({ username }) => {
   const navigate = useNavigate();
   const { theme } = useContext(GlobalStateContext);
 
-  // Holds the exercises in the user's fitness plan
+  // Holds the exercises in the user's current fitness plan
   const [planExercises, setPlanExercises] = useState([]);
-  // State for error/loading
+
+  // For error/loading states
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  // For adding a new exercise
-  const [newExercise, setNewExercise] = useState({
-    name: "",
-    target: "",
-    equipment: ""
-  });
 
-  // Fetch existing fitness plan
+  // For the search form
+  const [searchTarget, setSearchTarget] = useState("");
+  const [searchEquipment, setSearchEquipment] = useState("");
+  const [searchResults, setSearchResults] = useState([]);
+  const [selectedExerciseName, setSelectedExerciseName] = useState("");
+
+  // --- 1) FETCH THE USER'S CURRENT PLAN ON MOUNT ---
   useEffect(() => {
     const fetchPlan = async () => {
       try {
-        const response = await fetch(`http://localhost:5000/fitnessplan?username=${username}`);
+        const response = await fetch(
+          `http://localhost:5000/fitnessplan?username=${username}`
+        );
         if (!response.ok) {
           throw new Error("Failed to fetch fitness plan");
         }
         const data = await response.json();
+
+        // data.fitness_plan might be shaped like [planData, null]
+        // or { message, ... } depending on your code
+        // Let's handle the typical structure from your existing endpoint
         if (!data.fitness_plan || data.fitness_plan.message) {
-          // If the backend returned a "Fitness plan not found" or similar
           setPlanExercises([]);
         } else {
-          // data.fitness_plan typically looks like: { message, fitness_plan } or an array
-          // Since we returned from the service as "[planData, null]", we might need to parse carefully
-          // In your code, the "fitness_plan" property might contain the actual array
-          const plan = data.fitness_plan[0]?.fitness_plan || data.fitness_plan.fitness_plan || [];
-          setPlanExercises(Array.isArray(plan) ? plan : []);
+          // Often, the structure is:
+          // {
+          //   "message": "Fitness plan retrieved successfully",
+          //   "fitness_plan": [ { _id: "...", username: "...", fitness_plan: [ {...}, {...} ] }, null ]
+          // }
+          // or it might be "fitness_plan": {...}
+          // Adjust the logic based on your actual JSON shape
+          const raw = data.fitness_plan;
+          // If it's an array with index [0]
+          const firstItem = Array.isArray(raw) ? raw[0] : raw; 
+          // Then the actual plan array might be in firstItem.fitness_plan
+          const planArray = firstItem?.fitness_plan || [];
+          setPlanExercises(Array.isArray(planArray) ? planArray : []);
         }
       } catch (err) {
         setError(err.message);
@@ -48,7 +63,7 @@ const EditWorkout = ({ username }) => {
     fetchPlan();
   }, [username]);
 
-  // Handle removing an exercise
+  // --- 2) REMOVE EXERCISE FROM PLAN ---
   const handleRemoveExercise = async (exerciseName) => {
     try {
       const response = await fetch("http://localhost:5000/fitnessplan/edit", {
@@ -57,10 +72,9 @@ const EditWorkout = ({ username }) => {
         body: JSON.stringify({
           username: username,
           action: "remove",
-          exercise_data: { name: exerciseName }
+          exercise_data: { name: exerciseName },
         }),
       });
-
       if (!response.ok) {
         throw new Error("Failed to remove exercise");
       }
@@ -71,12 +85,52 @@ const EditWorkout = ({ username }) => {
     }
   };
 
-  // Handle adding a new exercise
-  const handleAddExercise = async () => {
-    if (!newExercise.name.trim()) {
-      alert("Please enter at least a name for the new exercise.");
+  // --- 3) SEARCH EXERCISES (CALLS /api/searchExercises) ---
+  const handleSearch = async () => {
+    // basic check
+    if (!searchTarget && !searchEquipment) {
+      alert("Please enter a target muscle or equipment to search");
       return;
     }
+    try {
+      const response = await fetch(
+        `http://localhost:5000/api/searchExercises?target=${searchTarget}&equipment=${searchEquipment}`
+      );
+      if (!response.ok) {
+        throw new Error("Failed to fetch exercises");
+      }
+      const data = await response.json();
+      setSearchResults(data || []);
+      setSelectedExerciseName(""); // Reset selection
+    } catch (err) {
+      alert(err.message);
+    }
+  };
+
+  // --- 4) ADD SELECTED EXERCISE FROM SEARCH RESULTS ---
+  const handleAddFromSearch = async () => {
+    if (!selectedExerciseName) {
+      alert("Please select an exercise from the dropdown");
+      return;
+    }
+    // The searchResults array comes from the ExerciseDB, so find the chosen object
+    const chosenExercise = searchResults.find(
+      (ex) => ex.name.toLowerCase() === selectedExerciseName.toLowerCase()
+    );
+    if (!chosenExercise) {
+      alert("Selected exercise not found in search results");
+      return;
+    }
+
+    // Prepare the exercise_data object for your plan
+    // e.g. name, target, equipment, etc. The keys must match your plan structure
+    const exerciseData = {
+      name: chosenExercise.name,
+      target: chosenExercise.target,
+      equipment: chosenExercise.equipment
+      // You could add more properties if your plan expects them
+    };
+
     try {
       const response = await fetch("http://localhost:5000/fitnessplan/edit", {
         method: "PUT",
@@ -84,54 +138,52 @@ const EditWorkout = ({ username }) => {
         body: JSON.stringify({
           username: username,
           action: "add",
-          exercise_data: {
-            name: newExercise.name.trim(),
-            target: newExercise.target.trim(),
-            equipment: newExercise.equipment.trim()
-          }
+          exercise_data: exerciseData,
         }),
       });
       if (!response.ok) {
         throw new Error("Failed to add exercise");
       }
       const result = await response.json();
+      // updated_plan is returned by the server, so replace local plan with that
       setPlanExercises(result.updated_plan || []);
-      // Reset the input fields
-      setNewExercise({ name: "", target: "", equipment: "" });
+      // Optional: clear search results or keep them around
+      // setSearchResults([]);
+      // setSearchTarget("");
+      // setSearchEquipment("");
     } catch (err) {
       alert(err.message);
     }
   };
 
-  // Capitalize for display
+  // Utility for capitalizing
   const capitalize = (str) => {
+    if (!str) return "";
     return str
       .split(" ")
       .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
       .join(" ");
   };
 
-  if (loading) {
-    return <p>Loading plan...</p>;
-  }
-  if (error) {
-    return <p>Error: {error}</p>;
-  }
+  if (loading) return <p>Loading plan...</p>;
+  if (error) return <p>Error: {error}</p>;
 
   return (
     <div className={`Dashboard ${theme}`}>
       <div id="dashboardContainer">
         <h1>Edit Workout Plan</h1>
         <hr />
+
+        {/* --- DISPLAY CURRENT EXERCISES IN PLAN --- */}
         {planExercises.length === 0 ? (
-          <p>No exercises in your plan yet.</p>
+          <p>No exercises in your plan.</p>
         ) : (
           <div className="workout-list">
-            {planExercises.map((exercise, index) => (
-              <div key={index} className="workout-card">
-                <h2>{capitalize(exercise.name || "Untitled Exercise")}</h2>
-                <p><strong>Target:</strong> {capitalize(exercise.target || "N/A")}</p>
-                <p><strong>Equipment:</strong> {capitalize(exercise.equipment || "N/A")}</p>
+            {planExercises.map((exercise, idx) => (
+              <div key={idx} className="workout-card">
+                <h2>{capitalize(exercise.name)}</h2>
+                <p><strong>Target:</strong> {capitalize(exercise.target)}</p>
+                <p><strong>Equipment:</strong> {capitalize(exercise.equipment)}</p>
                 <button
                   onClick={() => handleRemoveExercise(exercise.name)}
                   className="workout-back-button"
@@ -144,30 +196,53 @@ const EditWorkout = ({ username }) => {
         )}
 
         <hr />
-        <h3>Add a New Exercise</h3>
-        <div>
+
+        {/* --- SEARCH FORM --- */}
+        <h2>Search Exercises</h2>
+        <p>Enter a target muscle or equipment keyword, then click Search.</p>
+        <div style={{ marginBottom: "1rem" }}>
+          <label style={{ marginRight: "5px" }}>Target Muscle:</label>
           <input
             type="text"
-            placeholder="Exercise name"
-            value={newExercise.name}
-            onChange={(e) => setNewExercise({ ...newExercise, name: e.target.value })}
+            placeholder="e.g. chest"
+            value={searchTarget}
+            onChange={(e) => setSearchTarget(e.target.value)}
           />
+          <label style={{ margin: "0 5px" }}>Equipment:</label>
           <input
             type="text"
-            placeholder="Target muscle"
-            value={newExercise.target}
-            onChange={(e) => setNewExercise({ ...newExercise, target: e.target.value })}
+            placeholder="e.g. barbell"
+            value={searchEquipment}
+            onChange={(e) => setSearchEquipment(e.target.value)}
           />
-          <input
-            type="text"
-            placeholder="Equipment"
-            value={newExercise.equipment}
-            onChange={(e) => setNewExercise({ ...newExercise, equipment: e.target.value })}
-          />
-          <button onClick={handleAddExercise} className="submit-workout-button">
-            Add Exercise
+          <button onClick={handleSearch} className="submit-workout-button">
+            Search
           </button>
         </div>
+
+        {/* --- DISPLAY SEARCH RESULTS & ADD --- */}
+        {searchResults.length > 0 && (
+          <div style={{ marginBottom: "1rem" }}>
+            <p>
+              Found {searchResults.length} exercise
+              {searchResults.length > 1 ? "s" : ""} (limited to 20).
+            </p>
+            <select
+              value={selectedExerciseName}
+              onChange={(e) => setSelectedExerciseName(e.target.value)}
+            >
+              <option value="">Select an exercise to add</option>
+              {searchResults.map((ex) => (
+                <option key={ex.id} value={ex.name}>
+                  {ex.name}
+                </option>
+              ))}
+            </select>
+            <button onClick={handleAddFromSearch} className="submit-workout-button">
+              Add Selected Exercise
+            </button>
+          </div>
+        )}
 
         <hr />
         <button onClick={() => navigate("/dashboard")} className="workout-back-button">
