@@ -20,7 +20,7 @@ def search_exercises():
     url = "https://exercisedb.p.rapidapi.com/exercises"
     headers = {
         "X-RapidAPI-Host": "exercisedb.p.rapidapi.com",
-        "X-RapidAPI-Key": "YOUR_RAPIDAPI_KEY"  # <-- replace with your real key
+        "X-RapidAPI-Key": "6b1930c0bemsh7b90e4e2a7c4fbep189deejsn6b951db51c23"  # API key
     }
     response = requests.get(url, headers=headers)
     if response.status_code != 200:
@@ -32,9 +32,17 @@ def search_exercises():
     for ex in all_exercises:
         ex_target = ex.get('target', '').lower()
         ex_equipment = ex.get('equipment', '').lower()
-        # "Best approach" is flexible. For now, we do a 'substring' match:
-        if target in ex_target and equipment in ex_equipment:
-            filtered.append(ex)
+        # flexible. For now, we do a 'substring' match:
+        # if both are provided, require exact match
+        if target and equipment:
+            if ex_target == target and ex_equipment == equipment:
+                filtered.append(ex)
+        elif target:  # only target specified
+            if ex_target == target:
+                filtered.append(ex)
+        elif equipment:  # only equipment specified
+            if ex_equipment == equipment:
+                filtered.append(ex)
 
     # Limit to 20 to prevent overwhelming the user
     filtered = filtered[:20]

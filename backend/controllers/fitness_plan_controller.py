@@ -3,7 +3,7 @@
 
 
 from flask import Blueprint, request, jsonify
-from services.fitness_plan_service import create_fitness_plan, get_fitness_plan
+from services.fitness_plan_service import create_fitness_plan, get_fitness_plan, edit_fitness_plan_service
 
 fitness_plan_controller = Blueprint('fitness_plan_controller', __name__)
 

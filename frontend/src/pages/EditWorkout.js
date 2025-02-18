@@ -5,6 +5,43 @@ import { GlobalStateContext } from "../context/GlobalStateContext";
 import "../styles/App.css";     
 import "../styles/Workout.css"; 
 
+// List of known target muscle values from the ExerciseDB
+// https://rapidapi.com/thisishealfy/api/exercisedb/
+// Include 'cardiovascular system' for cardio, plus standard muscle groups:
+const muscleGroups = [
+  "cardiovascular system",
+  "abductors",
+  "abs",
+  "adductors",
+  "biceps",
+  "calves",
+  "delts",
+  "glutes",
+  "hamstrings",
+  "lats",
+  "pectorals",
+  "quads",
+  "traps",
+  "triceps",
+  "upper back",
+];
+
+// Known equipment from the ExerciseDB (muscle mass + cardio sets combined)
+const equipmentOptions = [
+  "body weight",
+  "medicine ball",
+  "barbell",
+  "cable",
+  "dumbbell",
+  "ez barbell",
+  "kettlebell",
+  "smith machine",
+  "leverage machine",
+  "stationary bike",
+  "elliptical machine",
+  "stepmill machine",
+];
+
 const EditWorkout = ({ username }) => {
   const navigate = useNavigate();
   const { theme } = useContext(GlobalStateContext);
@@ -17,6 +54,7 @@ const EditWorkout = ({ username }) => {
   const [error, setError] = useState(null);
 
   // For the search form
+  // Select from muscleGroups
   const [searchTarget, setSearchTarget] = useState("");
   const [searchEquipment, setSearchEquipment] = useState("");
   const [searchResults, setSearchResults] = useState([]);
@@ -34,22 +72,14 @@ const EditWorkout = ({ username }) => {
         }
         const data = await response.json();
 
-        // data.fitness_plan might be shaped like [planData, null]
-        // or { message, ... } depending on your code
-        // Let's handle the typical structure from your existing endpoint
+        // data.fitness_plan might be shaped like [planData, null] or some structure
+        // Adjust as needed
         if (!data.fitness_plan || data.fitness_plan.message) {
           setPlanExercises([]);
         } else {
-          // Often, the structure is:
-          // {
-          //   "message": "Fitness plan retrieved successfully",
-          //   "fitness_plan": [ { _id: "...", username: "...", fitness_plan: [ {...}, {...} ] }, null ]
-          // }
-          // or it might be "fitness_plan": {...}
-          // Adjust the logic based on your actual JSON shape
           const raw = data.fitness_plan;
           // If it's an array with index [0]
-          const firstItem = Array.isArray(raw) ? raw[0] : raw; 
+          const firstItem = Array.isArray(raw) ? raw[0] : raw;
           // Then the actual plan array might be in firstItem.fitness_plan
           const planArray = firstItem?.fitness_plan || [];
           setPlanExercises(Array.isArray(planArray) ? planArray : []);
@@ -87,12 +117,14 @@ const EditWorkout = ({ username }) => {
 
   // --- 3) SEARCH EXERCISES (CALLS /api/searchExercises) ---
   const handleSearch = async () => {
-    // basic check
+    // if user didn't select a muscle group or equipment, we can still let them do partial
     if (!searchTarget && !searchEquipment) {
-      alert("Please enter a target muscle or equipment to search");
+      alert("Please select a target muscle or equipment to search");
       return;
     }
     try {
+      // We'll pass the exact strings as query params
+      // e.g. /api/searchExercises?target=pectorals&equipment=barbell
       const response = await fetch(
         `http://localhost:5000/api/searchExercises?target=${searchTarget}&equipment=${searchEquipment}`
       );
@@ -123,12 +155,11 @@ const EditWorkout = ({ username }) => {
     }
 
     // Prepare the exercise_data object for your plan
-    // e.g. name, target, equipment, etc. The keys must match your plan structure
     const exerciseData = {
       name: chosenExercise.name,
       target: chosenExercise.target,
       equipment: chosenExercise.equipment
-      // You could add more properties if your plan expects them
+      // More properties can be added
     };
 
     try {
@@ -136,7 +167,7 @@ const EditWorkout = ({ username }) => {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          username: username,
+          username,
           action: "add",
           exercise_data: exerciseData,
         }),
@@ -145,12 +176,7 @@ const EditWorkout = ({ username }) => {
         throw new Error("Failed to add exercise");
       }
       const result = await response.json();
-      // updated_plan is returned by the server, so replace local plan with that
       setPlanExercises(result.updated_plan || []);
-      // Optional: clear search results or keep them around
-      // setSearchResults([]);
-      // setSearchTarget("");
-      // setSearchEquipment("");
     } catch (err) {
       alert(err.message);
     }
@@ -199,22 +225,30 @@ const EditWorkout = ({ username }) => {
 
         {/* --- SEARCH FORM --- */}
         <h2>Search Exercises</h2>
-        <p>Enter a target muscle or equipment keyword, then click Search.</p>
+        <p>Select a muscle group or enter equipment, then click Search.</p>
         <div style={{ marginBottom: "1rem" }}>
           <label style={{ marginRight: "5px" }}>Target Muscle:</label>
-          <input
-            type="text"
-            placeholder="e.g. chest"
+          <select
             value={searchTarget}
             onChange={(e) => setSearchTarget(e.target.value)}
-          />
+            style={{ marginRight: "5px" }}
+          >
+            <option value="">-- Optional --</option>
+            {muscleGroups.map((muscle) => (
+              <option key={muscle} value={muscle}>
+                {capitalize(muscle)}
+              </option>
+            ))}
+          </select>
+
           <label style={{ margin: "0 5px" }}>Equipment:</label>
           <input
             type="text"
-            placeholder="e.g. barbell"
+            placeholder="e.g. barbell, body weight"
             value={searchEquipment}
             onChange={(e) => setSearchEquipment(e.target.value)}
           />
+
           <button onClick={handleSearch} className="submit-workout-button">
             Search
           </button>

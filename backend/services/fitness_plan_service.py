@@ -2,7 +2,7 @@ from flask import Flask, request, jsonify
 from flask_pymongo import PyMongo
 # from flask_jwt_extended import JWTManager, jwt_required
 from datetime import datetime
-from models.fitness_plan_model import retrieve_fitness_plan, store_fitness_plan
+from models.fitness_plan_model import retrieve_fitness_plan, store_fitness_plan, update_fitness_plan
 from services.fitness_plan_algorithm import generate_fitness_plan
 
 
