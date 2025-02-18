@@ -8,6 +8,7 @@ import FitnessData from "./pages/fitnessData";
 import Workout from "./pages/workout";
 import Survey from "./pages/survey";
 import Settings from "./pages/settings";
+import EditWorkout from "./pages/EditWorkout";
 
 class App extends Component {
 
@@ -37,6 +38,7 @@ class App extends Component {
             <Route path="/workout" element={<Workout username={this.state.username}/>} />
             <Route path="/survey" element={<Survey />} />
             <Route path="/settings" element={<Settings />} />
+            <Route path="/editworkout" element={<EditWorkout username={this.state.username} />} />
           </Routes>
         </div>
       </Router>

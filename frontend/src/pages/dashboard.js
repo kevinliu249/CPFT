@@ -18,6 +18,7 @@ const Dashboard = ({ username }) => {
 
         <div className="button-group"> {/* Grouped buttons for consistency */}
           <button onClick={() => navigate("/workout")}>Workout</button>
+          <button onClick={() => navigate("/editworkout")}>Edit Workout Plan</button>
           <button onClick={() => navigate("/survey")}>Trainer Survey</button>
           <button onClick={() => navigate("/fitnessData")}>Fitness Data</button>
           <button onClick={() => navigate("/settings")}>Settings</button>

@@ -36,3 +36,23 @@ def retrieve_fitness_plan(username):
         return jsonify({"message": "Fitness plan not found"}), 404
     
     return fitness_plan, 200
+
+    # NEW CODE: Update an existing fitness plan in the database
+def update_fitness_plan(username, updated_plan):
+    """
+    Overwrites the current fitness_plan array for the specified user.
+    """
+    from app import mongo
+    
+    # Use update_one to set the new plan
+    result = mongo.db.fitnessplans.update_one(
+        {"username": username},
+        {"$set": {"fitness_plan": updated_plan}}
+    )
+
+    if result.matched_count == 0:
+        # Return an error if no document was found
+        return None, "No existing plan found for user: " + username
+
+    # Return success if updated
+    return True, None
