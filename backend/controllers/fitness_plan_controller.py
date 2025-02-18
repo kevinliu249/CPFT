@@ -55,3 +55,41 @@ def fitness_plan_retrival_route():
 
     except Exception as e:
         return jsonify({"message": "Internal server error", "error": str(e)}), 500
+
+# NEW CODE: Route to edit a fitness plan (add/remove exercises)
+@fitness_plan_controller.route('/fitnessplan/edit', methods=['PUT'])
+def edit_fitness_plan_route():
+    """
+    Allows adding or removing an exercise from the user's plan. 
+    Expects JSON of the form:
+    {
+      "username": "alice123",
+      "action": "add" or "remove",
+      "exercise_data": {
+        "name": "plank",
+        "target": "abs",
+        ...
+      }
+    }
+    """
+    try:
+        data = request.get_json()
+        
+        username = data.get('username')
+        exercise_data = data.get('exercise_data')
+        action = data.get('action')  # "add" or "remove"
+        
+        if not username or not exercise_data or not action:
+            return jsonify({"message": "Missing required fields"}), 400
+        
+        updated_plan, error = edit_fitness_plan_service(username, exercise_data, action)
+        if error:
+            return jsonify({"message": error}), 400
+        
+        return jsonify({
+            "message": "Fitness plan updated successfully",
+            "updated_plan": updated_plan
+        }), 200
+
+    except Exception as e:
+        return jsonify({"message": "Internal server error", "error": str(e)}), 500        
