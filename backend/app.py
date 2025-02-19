@@ -8,6 +8,7 @@ from controllers.survey_controller import survey_controller
 from controllers.fitness_plan_controller import fitness_plan_controller
 from controllers.workout_controller import workout_controller
 from controllers.exercise_search_controller import exercise_search_controller
+from services.auth_service import auth_bp
 from config import Config
 
 app = Flask(__name__)
@@ -19,6 +20,7 @@ CORS(app, origins="http://localhost:3000")  # Allow requests only from React app
 
 # Initialize PyMongo
 mongo = PyMongo(app)
+app.mongo = mongo
 
 # Register the controller for user routes
 app.register_blueprint(user_controller)
@@ -26,6 +28,7 @@ app.register_blueprint(survey_controller)
 app.register_blueprint(fitness_plan_controller)
 app.register_blueprint(workout_controller)
 app.register_blueprint(exercise_search_controller)
+app.register_blueprint(auth_bp, url_prefix="/auth")
 
 if __name__ == '__main__':
     app.run(debug=True)
