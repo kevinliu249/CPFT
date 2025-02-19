@@ -47,7 +47,7 @@ const Register = ({ setUsername }) => {
     // Otherwise it should return False if the email is already registered
     const accountData = [document.getElementById("email").value, document.getElementById("username").value, document.getElementById("password1").value, avatarSelection];
     try {
-      const response = await fetch("http://localhost:3000/registering", {
+      const response = await fetch("http://localhost:5000/auth/registering", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
