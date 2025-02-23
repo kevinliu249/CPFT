@@ -49,4 +49,26 @@ html, body {
   box-sizing: border-box;
 }
 
+footer {
+  background-color: rgb(203, 203, 203);
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  position: absolute;
+  bottom: 0;
+  padding: 10px 0;
+}
+
+footer ul {
+  display: flex;
+  justify-content: space-around;
+}
+
+footer ul li {
+  list-style: none; 
+  text-align: center;
+  width: 25%;
+  margin: 0 2%
+}
+
 

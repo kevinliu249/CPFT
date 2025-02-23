@@ -1,5 +1,4 @@
 import React from "react";
-import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import '../styles/App.css';
 import '../styles/Register.css';
@@ -8,10 +7,8 @@ import avatar2 from "../images/avatar2.png";
 import avatar3 from "../images/avatar3.png";
 import avatar4 from "../images/avatar4.png";
 
-const Register = ({ setUsername }) => {
+const Register = ({ setUsername, setAvatar }) => {
   let avatarSelection = 1;
-  const [setResponseData] = useState(null);
-
   const navigate = useNavigate();
 
   const onBoardingNavigate = () => {
@@ -61,11 +58,10 @@ const Register = ({ setUsername }) => {
       }
       // Got a response from backend
       const backendResponse = await response.json();
-      setResponseData(backendResponse);
-      console.log(backendResponse);
       if (backendResponse) {
         // Successfully Created Account! Redirect user to Dashboard page
         setUsername(document.getElementById("username").value);
+        setAvatar(avatarSelection);
         navigate("/dashboard");
       } else {
         errorDisplay("That Email is already registered for an account.")

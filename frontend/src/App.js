@@ -14,11 +14,16 @@ class App extends Component {
 
   state = {
     username: "test_user",
+    userAvatar: "1",
     userData: ""
   }
 
   setUsername = (newUsername) => {
     this.setState({ username: newUsername });
+  };
+
+  setAvatar = (avatarNum) => {
+    this.setState({ userAvatar: avatarNum });
   };
 
   setLogin = (username, userData) => {
@@ -31,9 +36,9 @@ class App extends Component {
       <Router>
         <div className="App">
           <Routes>
-            <Route path="/" element={<Onboarding setLogin={this.setLogin}/>} />
-            <Route path="/dashboard" element={<Dashboard username={this.state.username} />} />
-            <Route path="/register" element={<Register setUsername={this.setUsername} />}/>
+            <Route path="/" element={<Onboarding setLogin={this.setLogin} setAvatar={this.setAvatar}/>} />
+            <Route path="/dashboard" element={<Dashboard username={this.state.username} avatarImageNum={this.state.userAvatar} />} />
+            <Route path="/register" element={<Register setUsername={this.setUsername} setAvatar={this.setAvatar} />}/>
             <Route path="/fitnessData" element={<FitnessData />} />
             <Route path="/workout" element={<Workout username={this.state.username}/>} />
             <Route path="/survey" element={<Survey />} />

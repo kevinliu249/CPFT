@@ -5,7 +5,7 @@ import "../styles/App.css";
 import "../styles/Onboarding.css";
 import picture from "../images/onboarding.png";
 
-const Onboarding = ({ setLogin }) => {
+const Onboarding = ({ setLogin, setAvatar }) => {
   const [setResponseData] = useState(null);
 
   const navigate = useNavigate();
@@ -19,6 +19,7 @@ const Onboarding = ({ setLogin }) => {
   };
 
   const error = () => {
+    // Displays when a user enters any incorrect information
     document.getElementById("errorMessage").style.display = "block";
   }
 
@@ -49,7 +50,9 @@ const Onboarding = ({ setLogin }) => {
       if (backendResponse) {
         // Successfully Logged In! Set up user informatin in state. Redirect user to Dashboard page
         // TODO:
-        // setLogin( fetched Username, fetched user Workout Cards );
+        // set state for fetched user Workout Cards
+        setLogin(backendResponse.username);
+        setAvatar(backendResponse.avatar);
         navigate("/dashboard");
       } else {
         throw new Error("There was a problem reaching the Backend");
@@ -66,6 +69,7 @@ const Onboarding = ({ setLogin }) => {
       <h1>Cross-Platform Personal Trainer Application</h1>
       <h3>A Daily Workout Personalized For You!</h3>
       <hr />
+      {/* Only shows if there is an error */}
       <span id="errorMessage">Invalid Email or Password!</span>
       <label htmlFor="email">Email:</label>
       <input type="text" id="email" name="email" /><br />
@@ -76,8 +80,24 @@ const Onboarding = ({ setLogin }) => {
       <div className="button-group">
         <button onClick={validateLogin}>Login</button>
         <button onClick={registerNavigate}>New User? <br />Click to Register</button>
+        {/* Button only for development of the App for ease of use. Will not be in live production. */}
         <button onClick={loginNavigate}>(Dev) Force Login</button>
       </div>
+
+      <footer>
+        <ul>
+          <li>Elliot Clark</li>
+          <li>Steven Pamplin</li>
+          <li>Joon Kang</li>
+          <li>Kevin Liu</li>
+        </ul>
+        <ul>
+          <li>Oregon State University</li>
+          <li>CS 467 Winter</li>
+          <li>Online Capstone Project</li>
+          <li>&copy; 2025</li>
+        </ul>
+      </footer>
     </div>
   );
 };
