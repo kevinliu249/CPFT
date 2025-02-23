@@ -10,6 +10,7 @@ from controllers.workout_controller import workout_controller
 from controllers.exercise_search_controller import exercise_search_controller
 from services.auth_service import auth_bp
 from config import Config
+from services.metrics_service import metrics_bp
 
 app = Flask(__name__)
 app.config.from_object(Config)
@@ -29,6 +30,7 @@ app.register_blueprint(fitness_plan_controller)
 app.register_blueprint(workout_controller)
 app.register_blueprint(exercise_search_controller)
 app.register_blueprint(auth_bp, url_prefix="/auth")
+app.register_blueprint(metrics_bp, url_prefix='/api') 
 
 if __name__ == '__main__':
     app.run(debug=True)

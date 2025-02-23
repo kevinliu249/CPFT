@@ -241,13 +241,16 @@ const EditWorkout = ({ username }) => {
             ))}
           </select>
 
-          <label style={{ margin: "0 5px" }}>Equipment:</label>
-          <input
-            type="text"
-            placeholder="e.g. barbell, body weight"
+          <label>Equipment:</label>
+          <select
             value={searchEquipment}
             onChange={(e) => setSearchEquipment(e.target.value)}
-          />
+          >
+            <option value="">-- Optional --</option>
+            {equipmentOptions.map((equip) => (
+              <option key={equip} value={equip}>{equip}</option>
+            ))}
+          </select>
 
           <button onClick={handleSearch} className="submit-workout-button">
             Search
