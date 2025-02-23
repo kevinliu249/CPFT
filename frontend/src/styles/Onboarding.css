@@ -77,8 +77,8 @@
 
 .button-group {
     display: flex;
-    flex-direction: column; /* Stacks the buttons vertically */
-    align-items: center; /* Center aligns them */
-    gap: var(--spacing-m); /* Adds space */
+    flex-direction: column;
+    align-items: center; 
+    gap: var(--spacing-m); 
   }
 
