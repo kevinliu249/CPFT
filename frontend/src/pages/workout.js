@@ -17,11 +17,14 @@ const Workout = ({ username }) => {
   useEffect(() => {
     const fetchWorkouts = async () => {
       try {
+        // Get daily workout from the Flask Endpoint
         const response = await fetch(`http://localhost:5000/workout?username=${username}`);
         if (!response.ok) throw new Error("Failed to fetch workouts");
 
         const data = await response.json();
         console.log("Fetched data:", data);
+        // "workouts" should be an array with 2 exercies.
+        // If the data has workout: array, store it, otherwise store an empty array.
         setWorkouts(Array.isArray(data.workout) ? data.workout : []);
       } catch (error) {
         setError(error.message);
@@ -44,10 +47,44 @@ const Workout = ({ username }) => {
     }));
   };
 
-  // Handle form submission
-  const handleSubmitWorkout = () => {
+/* 
+  NEW: handleSubmitWorkout:
+  1. transforms completed inputs into an array of objects that match Kevins Format
+  2. POST it to /workout?username=..l
+  3. Backend should log each exercise to workoutlogs in mongo
+  */
+  const handleSubmitWorkout = async () => {
+    // For convenience, log the local state
     console.log("Completed workout data:", completedInputs);
-    alert("Workout data submitted! Check console for details.");
+    // Builds expected array
+    const submissionArray = workouts.map((_, idx) => {
+      return {
+        sets: completedInputs[idx]?.sets || null,
+        reps: completedInputs[idx]?.reps || null,
+        weight: completedInputs[idx]?.weight || null,
+        time: completedInputs[idx]?.time || null,
+      };
+    });
+    // POST to "/workout" endpoint with the username as query param
+    try {
+      const response = await fetch(`http://localhost:5000/workout?username=${username}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(submissionArray),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to log workout");
+      }
+
+      const data = await response.json();
+      console.log("Workout logging response:", data);
+
+      alert("Workout data submitted successfully!");
+    } catch (err) {
+      console.error(err);
+      alert("Error logging workout data");
+    }
   };
 
   // Capitalize function to format text properly
@@ -144,10 +181,15 @@ const Workout = ({ username }) => {
           )}
         </div>
         <hr />
+        {/* Clicking this will trigger our POST request */}
         <button onClick={handleSubmitWorkout} className="submit-workout-button">
           Submit Completed Workout
         </button>
-        <button onClick={() => navigate("/dashboard")} className="workout-back-button">
+
+        <button
+          onClick={() => navigate("/dashboard")}
+          className="workout-back-button"
+        >
           Back to Dashboard
         </button>
       </div>
