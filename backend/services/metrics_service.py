@@ -1,37 +1,71 @@
 # service for tracking user progress via graphical data visualization efforts
 
 # metrics_service.py
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, request, jsonify, current_app
+from flask_jwt_extended import jwt_required, get_jwt_identity
+from flask_pymongo import PyMongo
+import matplotlib.pyplot as plt
+import io
+import base64
+import logging
 # Joon If you want to actually render figures with Matplotlib, you’d import matplotlib here.
 # import matplotlib
 # matplotlib.use('Agg')  # For server-side image generation if needed
 # import matplotlib.pyplot as plt
+logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 
-metrics_bp = Blueprint('metrics_bp', __name__)
+metrics_service_bp = Blueprint('metrics_bp', __name__)
 
-@metrics_bp.route('/metrics/<username>', methods=['GET'])
-def get_user_metrics(username):
-    """
-    Returns placeholder user workout metrics to be displayed in the frontend.
-    In the future, you can query MongoDB or other data sources to get actual stats.
-    """
+mongo = PyMongo()
 
-    # For now, im using a static, placeholder dictionary. 
-    # You can replace these with dynamic calculations from your workout logs.
-    placeholder_metrics = {
-        "highestReps": 12,           # e.g. the highest single set of reps user ever did
-        "lastReps": 8,              # e.g. the last workout's total or best reps
-        "highestVolume": 1000,      # e.g. highest total volume for a single session
-        "lastVolume": 600,          # e.g. last session's total volume
-        "totalCardioTime": 180,     # e.g. total minutes (or seconds) of cardio completed so far
-        "sessionCount": 25          # e.g. total number of workout sessions completed
-    }
+@metrics_service_bp.route('/workout-data', methods=['GET'])
+@jwt_required()
+def workout_data():
+    try:
+        # retrieve username and exercise for progress visualization
+        username = get_jwt_identity()
+        exercise_name = request.args.get('exercise')
+        logging.info("Fetching workout data for user: %s, exercise: %s", username, exercise_name)
 
-    # For now, just returning JSON for the frontend.
-    # Example pseudocode (not returning an image here, just showing how you could do it):
-    # fig, ax = plt.subplots()
-    # ax.plot([1,2,3,4], [10,20,5,40])  # your dataset
-    # plt.savefig('static/placeholder_chart.png')
+        mongo = current_app.mongo
 
-    return jsonify(placeholder_metrics), 200
+        if not exercise_name:
+            logging.warning("Exercise parameter is required")
+            return jsonify({"success": False, "message": "Exercise parameter is required"}), 400
+        # outputs total volume
+        pipeline = [
+            {'$match': {'username': username, 'exercise': exercise_name}},
+            {'$group': {
+                '_id': {'date': {'$dateToString': {'format': '%Y-%m-%d', 'date': '$date'}}},
+                'total_volume': {'$sum': {'$multiply': ['$weight', '$reps', '$sets']}}
+            }},
+            {'$sort': {'_id.date': 1}}
+        ]
+        results = list(mongo.db.workouts.aggregate(pipeline))
+        if not results:
+            logging.warning("No workout data found for user: %s", username)
+            return jsonify({"success": False, "message": "No workout data found"}), 404
+
+        dates = [entry['_id']['date'] for entry in results]
+        volumes = [entry['total_volume'] for entry in results]
+
+        plt.figure(figsize=(10, 5))
+        plt.plot(dates, volumes, marker='o', linestyle='-')
+        plt.xlabel('Date')
+        plt.ylabel('Total Volume (lbs)')
+        plt.title(f'Workout Progress for {exercise_name}')
+        plt.xticks(rotation=45)
+        plt.grid()
+        
+        img = io.BytesIO()
+        plt.savefig(img, format='png')
+        img.seek(0)
+        img_base64 = base64.b64encode(img.getvalue()).decode()
+        
+        logging.info("Workout data successfully retrieved for user: %s", username)
+        return jsonify({"success": True, "exercise": exercise_name, "progress": results, "chart": img_base64})
+    
+    except Exception as e:
+        logging.error("Error fetching workout data: %s", str(e))
+        return jsonify({"success": False, "message": "Server error"}), 500
 
