@@ -11,6 +11,7 @@ from controllers.fitness_plan_controller import fitness_plan_controller
 from controllers.workout_controller import workout_controller
 from controllers.exercise_search_controller import exercise_search_controller
 from services.auth_service import auth_bp
+from services.metrics_service import metrics_bp
 from config import Config
 
 app = Flask(__name__)
