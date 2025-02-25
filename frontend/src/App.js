@@ -41,7 +41,7 @@ class App extends Component {
             <Route path="/register" element={<Register setUsername={this.setUsername} setAvatar={this.setAvatar} />}/>
             <Route path="/fitnessData" element={<FitnessData />} />
             <Route path="/workout" element={<Workout username={this.state.username}/>} />
-            <Route path="/survey" element={<Survey />} />
+            <Route path="/survey" element={<Survey username={this.state.username} />} />
             <Route path="/settings" element={<Settings />} />
             <Route path="/editworkout" element={<EditWorkout username={this.state.username} />} />
           </Routes>
