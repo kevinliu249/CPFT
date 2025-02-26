@@ -14,9 +14,12 @@ from services.auth_service import auth_bp
 from services.login import login_bp
 from config import Config
 from services.metrics_service import metrics_service_bp
+from flask_jwt_extended import JWTManager
 
 app = Flask(__name__)
 app.config.from_object(Config)
+
+jwt = JWTManager(app)
 
 # Enable CORS for your frontend domain (React app)
 CORS(app, origins="http://localhost:3000")  # Allow requests only from React app on localhost:3000

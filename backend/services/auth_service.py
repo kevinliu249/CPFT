@@ -2,7 +2,6 @@ from flask import Blueprint, request, jsonify, current_app
 from flask_pymongo import PyMongo
 import bcrypt
 import logging
-from config import Config
 
 auth_bp = Blueprint('auth', __name__)
 
