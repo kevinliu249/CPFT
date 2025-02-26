@@ -3,6 +3,8 @@
 from flask import Flask
 from flask_pymongo import PyMongo
 from flask_cors import CORS
+# from apscheduler.schedulers.background import BackgroundScheduler
+# from services.notification_service import send_daily_motivational_emails
 from controllers.user_controller import user_controller
 from controllers.survey_controller import survey_controller
 from controllers.fitness_plan_controller import fitness_plan_controller
@@ -31,8 +33,15 @@ app.register_blueprint(fitness_plan_controller)
 app.register_blueprint(workout_controller)
 app.register_blueprint(exercise_search_controller)
 app.register_blueprint(auth_bp, url_prefix="/auth")
-app.register_blueprint(login_bp, url_prefix="/auth")
-app.register_blueprint(metrics_service_bp, url_prefix='/api') 
+app.register_blueprint(metrics_bp, url_prefix='/api') 
 
 if __name__ == '__main__':
     app.run(debug=True)
+
+# Once scheduler enabled, replace above with this. 
+# if __name__ == '__main__':
+#    try:
+#        app.run(debug=True)
+#    except:
+#        # Shut down the scheduler when exiting
+#        scheduler.shutdown()
