@@ -33,7 +33,8 @@ app.register_blueprint(fitness_plan_controller)
 app.register_blueprint(workout_controller)
 app.register_blueprint(exercise_search_controller)
 app.register_blueprint(auth_bp, url_prefix="/auth")
-app.register_blueprint(metrics_bp, url_prefix='/api') 
+app.register_blueprint(login_bp, url_prefix='/api')
+app.register_blueprint(metrics_service_bp, url_prefix='/api') 
 
 if __name__ == '__main__':
     app.run(debug=True)
