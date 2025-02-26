@@ -39,6 +39,12 @@ app.register_blueprint(auth_bp, url_prefix="/auth")
 app.register_blueprint(login_bp, url_prefix='/api')
 app.register_blueprint(metrics_service_bp, url_prefix='/api') 
 
+# Set up scheduler
+#scheduler = BackgroundScheduler()
+# Schedule to run once a day at, for example, 7:00 AM
+#scheduler.add_job(func=send_daily_motivational_emails, trigger='cron', hour=7)
+#scheduler.start()
+
 if __name__ == '__main__':
     app.run(debug=True)
 
