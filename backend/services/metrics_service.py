@@ -4,9 +4,6 @@
 from flask import Blueprint, request, jsonify, current_app
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from flask_pymongo import PyMongo
-import matplotlib.pyplot as plt
-import io
-import base64
 import logging
 # Joon If you want to actually render figures with Matplotlib, you’d import matplotlib here.
 # import matplotlib
@@ -36,36 +33,35 @@ def workout_data():
         pipeline = [
             {'$match': {'username': username, 'exercise': exercise_name}},
             {'$group': {
-                '_id': {'date': {'$dateToString': {'format': '%Y-%m-%d', 'date': '$date'}}},
-                'total_volume': {'$sum': {'$multiply': ['$weight', '$reps', '$sets']}}
-            }},
-            {'$sort': {'_id.date': 1}}
+                '_id': None,
+                'highestReps': {'$max': "$reps"},
+                'lastReps': {'$last': "$reps"},
+                'highestVolume': {'$max': {'$multiply': ['$weight', '$reps', '$sets']}},
+                'lastVolume': {'$last': {'$multiply': ['$weight', '$reps', '$sets']}},
+                'totalCardioTime': {'$sum': "$cardio_time"},  # Assumes cardio_time is stored
+                'sessionCount': {'$sum': 1}
+            }}
         ]
-        results = list(mongo.db.workouts.aggregate(pipeline))
+        
+        results = list(mongo.db.workoutlogs.aggregate(pipeline))
         if not results:
-            logging.warning("No workout data found for user: %s", username)
             return jsonify({"success": False, "message": "No workout data found"}), 404
 
-        dates = [entry['_id']['date'] for entry in results]
-        volumes = [entry['total_volume'] for entry in results]
+        # Extract values properly
+        data = results[0] if results else {}
+        
+        return jsonify({
+            "success": True,
+            "metrics": {
+                "highestReps": data.get("highestReps", 0),
+                "lastReps": data.get("lastReps", 0),
+                "highestVolume": data.get("highestVolume", 0),
+                "lastVolume": data.get("lastVolume", 0),
+                "totalCardioTime": data.get("totalCardioTime", 0),
+                "sessionCount": data.get("sessionCount", 0)
+            }
+        })
 
-        plt.figure(figsize=(10, 5))
-        plt.plot(dates, volumes, marker='o', linestyle='-')
-        plt.xlabel('Date')
-        plt.ylabel('Total Volume (lbs)')
-        plt.title(f'Workout Progress for {exercise_name}')
-        plt.xticks(rotation=45)
-        plt.grid()
-        
-        img = io.BytesIO()
-        plt.savefig(img, format='png')
-        img.seek(0)
-        img_base64 = base64.b64encode(img.getvalue()).decode()
-        
-        logging.info("Workout data successfully retrieved for user: %s", username)
-        return jsonify({"success": True, "exercise": exercise_name, "progress": results, "chart": img_base64})
-    
     except Exception as e:
         logging.error("Error fetching workout data: %s", str(e))
         return jsonify({"success": False, "message": "Server error"}), 500
-

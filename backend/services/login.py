@@ -11,7 +11,7 @@ logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(
 login_bp = Blueprint('auth_service', __name__)
 mongo = PyMongo()
 
-login_bp.route('/login', methods=['POST'])
+@login_bp.route('/login', methods=['POST'])
 def login():
     try:
         data = request.json

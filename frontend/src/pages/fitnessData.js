@@ -5,7 +5,7 @@ import "../styles/Workout.css";
 import { Bar } from "react-chartjs-2";
 import 'chart.js/auto';
 
-const FitnessData = ({ username }) => {
+const FitnessData = ({ username, token }) => {
   // State to hold your fetched metrics
   const [metrics, setMetrics] = useState({});
   const [loading, setLoading] = useState(true);
