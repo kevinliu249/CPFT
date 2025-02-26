@@ -2,12 +2,45 @@ import requests, random
 from flask import Flask, request, jsonify
 from flask_pymongo import PyMongo
 from models.survey_model import retrieve_user_survey
-
+from datetime import datetime
 
 
 def avoid_repetition(user_name, fitness_plan):
-    # Pending workout logging implementation
-    return fitness_plan
+    from app import mongo
+    # Retrieve the user's workout logs from the "workoutlogs" collection
+    user_workoutlog = list(mongo.db.workoutlogs.find({"username": user_name}).sort("datetime", -1).limit(2))
+
+    # If no logs are found, return the original fitness plan
+    if not user_workoutlog:
+        return fitness_plan
+    
+    # Get the target muscle of exercises from the most recent workout entries
+    previous_exercise_targets = []
+    for workout in user_workoutlog:
+        exercise_target = workout.get("target", "").lower()  # Normalize to lowercase for comparison
+        previous_exercise_targets.append(exercise_target)
+
+    # For Cardiovascular Exercises, avoid repeating same exercises by fetching exercise names
+    if "cardiovascular system" in previous_exercise_targets:
+        previous_exercise_names = []
+        for workout in user_workoutlog:
+            exercise_name = workout.get("name", "").lower()  # Normalize to lowercase for comparison
+            previous_exercise_names.append(exercise_name)
+
+        new_fitness_plan = [
+        exercise for exercise in fitness_plan if exercise["name"].lower() not in previous_exercise_names
+        ]
+
+        return new_fitness_plan
+    
+    # For Muscle Mass workouts, avoid repeating the same target muscle group
+    else:
+        # Filter out exercises in the current fitness plan based on recent target muscle group
+        new_fitness_plan = [
+        exercise for exercise in fitness_plan if exercise["target"].lower() not in previous_exercise_targets
+        ]
+
+        return new_fitness_plan 
 
 
 def select_two_exercises(workout_pool):
