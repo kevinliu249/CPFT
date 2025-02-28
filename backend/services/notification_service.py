@@ -1,19 +1,20 @@
 # services/notification_service.py
 
 import smtplib
+import random
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
-import random
+from flask import current_app
 
-from app import mongo  # query the DB to get user info
-
-# A short list of “bro-science” lines
 BRO_SCIENCE_PHRASES = [
     "Light weight, baby! Time to crush this workout!",
     "Ain't nothin' but a peanut – let's lift!",
     "Suns out, guns out! The mirror is waiting.",
     "Today’s forecast: 100% chance of swole.",
-    "It’s PR day, bro. NO EXCUSES!"
+    "It’s PR day, bro. NO EXCUSES!",
+    "Sweat is just your muscles crying tears of joy!",
+    "If it ain't heavy, it ain't worth lifting. Go big or go home!",
+    "Time to pray at the alter of GAINZ! Make Swoley Jesus proud!"
 ]
 
 def get_bro_science_message():
@@ -21,31 +22,20 @@ def get_bro_science_message():
 
 def get_all_users():
     """
-    Pull all users from MongoDB (or select specific ones).
-    Returns a list of user documents with 'email' fields.
+    Pulls all users from the DB.
     """
-    users_collection = mongo.db.users
-    user_docs = users_collection.find()
+    db = current_app.mongo.db  # Access Mongo client through current_app
+    user_docs = db.users.find()
     return list(user_docs)
 
 def send_email_smtp(recipient_email, subject, body, sender_email, sender_password):
-    """
-    Sends an email via SMTP. This uses a Gmail SMTP server,
-    but could be customized to a chosen provider (SendGrid, Mailgun, AWS SES, etc.).
-    """
-    # Creates a multipart message
     msg = MIMEMultipart("alternative")
     msg["Subject"] = subject
     msg["From"] = sender_email
     msg["To"] = recipient_email
-
-    # Attach plain text body
-    # Could also attach an HTML version in the future
     msg.attach(MIMEText(body, "plain"))
 
     try:
-        # Connecting to Gmail’s SMTP. 
-        #  eventually Adjust for your provider:
         with smtplib.SMTP("smtp.gmail.com", 587) as server:
             server.ehlo()
             server.starttls()
@@ -55,21 +45,14 @@ def send_email_smtp(recipient_email, subject, body, sender_email, sender_passwor
     except Exception as e:
         print(f"Failed to send email to {recipient_email}: {str(e)}")
 
-
 def send_daily_motivational_emails():
-    """
-    Retrieves all users, sends each a daily motivational email
-    with a random gym-bro phrase.
-    """
     users = get_all_users()
-
     for user in users:
         recipient_email = user.get("email")
         if not recipient_email:
-            continue  # skip users without email
+            continue
 
         bro_phrase = get_bro_science_message()
-        
         subject = "Your Daily Gym-Bro Motivation!"
         body = (
             f"Hey {user['username']}!\n\n"
@@ -77,9 +60,7 @@ def send_daily_motivational_emails():
             f"\"{bro_phrase}\"\n\n"
             "Stay swole!\n-- The CPFT Team"
         )
-
-        # stored “sender” email and password in environment variables
-        sender_email = "your_send_account@gmail.com"
-        sender_password = "your_app_specific_or_gmail_password"
+        sender_email = "cpftnotifications@gmail.com"
+        sender_password = "uist acpv rgoc fzdw"
 
         send_email_smtp(recipient_email, subject, body, sender_email, sender_password)
