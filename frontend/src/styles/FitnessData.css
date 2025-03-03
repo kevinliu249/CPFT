@@ -1,0 +1,52 @@
+.fitness-data-container {
+    text-align: center;
+
+    h2 {
+        text-align: center;
+        font-size: 2em;
+        margin-top: 2%;
+    }
+
+    .stats-numbers {
+        padding: 5%;
+        margin: 5%;
+        width: 90vw;
+        max-width: 600px;
+        min-width: 350px;
+        margin: 0 auto;
+        border-radius: 5px;
+        background-color: black;
+        color: white;
+    }
+
+    .stat-item {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .stat-item p {
+        font-size: 1.3em;
+        font-weight: bold;
+    }
+
+
+    .chart-container {
+        margin-top: 5% !important;
+        width: 90vw;
+        margin: 0 auto;
+        max-width: 1200px;
+    }
+
+    button {
+        background-color: var(--color-primary);
+        color: white;
+        border: none;
+        padding: var(--spacing-s) var(--spacing-m);
+        font-size: var(--font-size-body);
+        border-radius: var(--spacing-xs);
+        margin: 2%;
+        cursor: pointer;
+        width: 200px;
+    }
+
+}
