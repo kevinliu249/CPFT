@@ -19,13 +19,26 @@ def register():
 
         mongo = current_app.mongo
 
-        if not isinstance(data, list) or len(data) != 4:
+        if isinstance(data, list) and len(data) == 4:
+            logging.info("Converting array payload to object")
+            email, username, password, avatar = data
+            registration_data = {
+                "email": email,
+                "username": username,
+                "password": password,
+                "avatar": avatar
+            }
+        elif isinstance(data, dict):
+            registration_data = data
+        else:
             logging.warning("Invalid request format")
             return jsonify({"success": False, "message": "Invalid request format"}), 400
         
-        email, username, password, avatar = data
-        email = email.lower()
-
+        email = registration_data.get("email", "").lower()
+        username = registration_data.get("username")
+        password = registration_data.get("password")
+        avatar = registration_data.get("avatar")
+        
         if not all ([email, username, password, avatar]):
             return jsonify({"success": False, "message": "Missing required fields"}), 400
 

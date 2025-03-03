@@ -42,7 +42,12 @@ const Register = ({ setUsername, setAvatar }) => {
     // The following code sends an array of user entered [Email, Username, Password, Avatar Image Number] to the Backend
     // Backend should return True if the account was created
     // Otherwise it should return False if the email is already registered
-    const accountData = [document.getElementById("email").value, document.getElementById("username").value, document.getElementById("password1").value, avatarSelection];
+    const accountData = {
+      email: document.getElementById("email").value,
+      username: document.getElementById("username").value,
+      password: document.getElementById("password1").value,
+      avatar: avatarSelection
+  };
     try {
       const response = await fetch("http://localhost:5000/auth/registering", {
         method: "POST",

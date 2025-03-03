@@ -42,7 +42,8 @@ def login():
 
         access_token = create_access_token(identity=username, expires_delta=timedelta(hours=2))
         logging.info("User logged in successfully: %s", username)
-        return jsonify({"success": True, "access_token": access_token, "message": "Login successful"}), 200 
+        return jsonify({"success": True, "access_token": access_token, "username": username,
+            "avatar": user.get("avatar", 1), "message": "Login successful"}), 200 
     
     except Exception as e:
         logging.error("Error during login: %s", str(e))
