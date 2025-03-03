@@ -3,7 +3,7 @@ import React, { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { GlobalStateContext } from "../context/GlobalStateContext"; 
 import "../styles/App.css";     
-import "../styles/Workout.css"; 
+import "../styles/EditWorkout.css"; 
 
 // List of known target muscle values from the ExerciseDB
 // https://rapidapi.com/thisishealfy/api/exercisedb/
@@ -196,23 +196,60 @@ const EditWorkout = ({ username }) => {
 
   return (
     <div className={`Dashboard ${theme}`}>
-      <div id="dashboardContainer">
+      <div id="Edit-dashboardContainer">
         <h1>Edit Workout Plan</h1>
+        <hr />
+        {/* --- SEARCH FORM --- */}
+        <div id="EditSearchForm">
+          <h2>Search Exercises</h2>
+          <p>Select a muscle group or enter equipment, then click Search.</p>
+          <div style={{ marginBottom: "1rem" }}>
+            <label style={{ marginRight: "5px" }}>Target Muscle:</label>
+            <select
+              value={searchTarget}
+              onChange={(e) => setSearchTarget(e.target.value)}
+              style={{ marginRight: "5px" }}
+            >
+              <option value="">-- Optional --</option>
+              {muscleGroups.map((muscle) => (
+                <option key={muscle} value={muscle}>
+                  {capitalize(muscle)}
+                </option>
+              ))}
+            </select>
+              <br></br>
+            <label>Equipment: </label>
+            <select
+              value={searchEquipment}
+              onChange={(e) => setSearchEquipment(e.target.value)}
+            >
+              <option value="">-- Optional --</option>
+              {equipmentOptions.map((equip) => (
+                <option key={equip} value={equip}>{equip}</option>
+              ))}
+            </select>
+
+            <button onClick={handleSearch} className="submit-workoutEdit-button">
+              Search
+            </button>
+          </div>
+        </div>
+
         <hr />
 
         {/* --- DISPLAY CURRENT EXERCISES IN PLAN --- */}
         {planExercises.length === 0 ? (
           <p>No exercises in your plan.</p>
         ) : (
-          <div className="workout-list">
+          <div className="workoutEdit-list">
             {planExercises.map((exercise, idx) => (
-              <div key={idx} className="workout-card">
+              <div key={idx} className="workoutEdit-card">
                 <h2>{capitalize(exercise.name)}</h2>
                 <p><strong>Target:</strong> {capitalize(exercise.target)}</p>
                 <p><strong>Equipment:</strong> {capitalize(exercise.equipment)}</p>
                 <button
                   onClick={() => handleRemoveExercise(exercise.name)}
-                  className="workout-back-button"
+                  className="workoutEdit-back-button"
                 >
                   Remove
                 </button>
@@ -221,45 +258,9 @@ const EditWorkout = ({ username }) => {
           </div>
         )}
 
-        <hr />
-
-        {/* --- SEARCH FORM --- */}
-        <h2>Search Exercises</h2>
-        <p>Select a muscle group or enter equipment, then click Search.</p>
-        <div style={{ marginBottom: "1rem" }}>
-          <label style={{ marginRight: "5px" }}>Target Muscle:</label>
-          <select
-            value={searchTarget}
-            onChange={(e) => setSearchTarget(e.target.value)}
-            style={{ marginRight: "5px" }}
-          >
-            <option value="">-- Optional --</option>
-            {muscleGroups.map((muscle) => (
-              <option key={muscle} value={muscle}>
-                {capitalize(muscle)}
-              </option>
-            ))}
-          </select>
-
-          <label>Equipment:</label>
-          <select
-            value={searchEquipment}
-            onChange={(e) => setSearchEquipment(e.target.value)}
-          >
-            <option value="">-- Optional --</option>
-            {equipmentOptions.map((equip) => (
-              <option key={equip} value={equip}>{equip}</option>
-            ))}
-          </select>
-
-          <button onClick={handleSearch} className="submit-workout-button">
-            Search
-          </button>
-        </div>
-
         {/* --- DISPLAY SEARCH RESULTS & ADD --- */}
         {searchResults.length > 0 && (
-          <div style={{ marginBottom: "1rem" }}>
+          <div>
             <p>
               Found {searchResults.length} exercise
               {searchResults.length > 1 ? "s" : ""} (limited to 20).
@@ -275,14 +276,14 @@ const EditWorkout = ({ username }) => {
                 </option>
               ))}
             </select>
-            <button onClick={handleAddFromSearch} className="submit-workout-button">
+            <button onClick={handleAddFromSearch} className="submit-workoutEdit-button">
               Add Selected Exercise
             </button>
           </div>
         )}
 
         <hr />
-        <button onClick={() => navigate("/dashboard")} className="workout-back-button">
+        <button onClick={() => navigate("/dashboard")} className="workoutEdit-back-button">
           Back to Dashboard
         </button>
       </div>

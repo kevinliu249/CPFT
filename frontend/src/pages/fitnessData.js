@@ -1,6 +1,8 @@
 // FitnessData.js
 import React, { useEffect, useState } from "react";
-import "../styles/Workout.css"; 
+import { useNavigate } from "react-router-dom";
+import '../styles/App.css';
+import '../styles/FitnessData.css';
 // Import the components from react-chartjs-2
 import { Bar } from "react-chartjs-2";
 import 'chart.js/auto';
@@ -10,6 +12,8 @@ const FitnessData = ({ username }) => {
   const [metrics, setMetrics] = useState({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
+  const navigate = useNavigate();
 
   // Fetch placeholder metrics on component mount
   useEffect(() => {
@@ -63,32 +67,32 @@ const FitnessData = ({ username }) => {
 
   return (
     <div className="fitness-data-container">
-      <h2>Fitness Data for {username}</h2>
+      <h2>Fitness Data for: {username}</h2>
 
       {/* Numeric stats section */}
       <div className="stats-numbers">
         <div className="stat-item">
-          <h3>Highest Reps</h3>
+          <h3>Highest Reps:</h3>
           <p>{metrics.highestReps}</p>
         </div>
         <div className="stat-item">
-          <h3>Last Reps</h3>
+          <h3>Last Reps:</h3>
           <p>{metrics.lastReps}</p>
         </div>
         <div className="stat-item">
-          <h3>Highest Volume</h3>
+          <h3>Highest Volume:</h3>
           <p>{metrics.highestVolume}</p>
         </div>
         <div className="stat-item">
-          <h3>Last Volume</h3>
+          <h3>Last Volume:</h3>
           <p>{metrics.lastVolume}</p>
         </div>
         <div className="stat-item">
-          <h3>Total Cardio Time (min)</h3>
+          <h3>Total Cardio Time (min):</h3>
           <p>{totalTime}</p>
         </div>
         <div className="stat-item">
-          <h3>Total Sessions</h3>
+          <h3>Total Sessions:</h3>
           <p>{sessionCount}</p>
         </div>
       </div>
@@ -103,6 +107,11 @@ const FitnessData = ({ username }) => {
         <h3>Volume Comparison</h3>
         <Bar data={volumeData} />
       </div>
+
+      <button onClick={() => navigate("/dashboard")}>
+          Back to Dashboard
+      </button>
+
     </div>
   );
 };
