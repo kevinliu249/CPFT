@@ -54,7 +54,7 @@ footer {
   display: flex;
   flex-direction: column;
   width: 100%;
-  position: absolute;
+  position: fixed;
   bottom: 0;
   padding: 10px 0;
 }
