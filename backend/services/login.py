@@ -22,30 +22,46 @@ def login():
         mongo = current_app.mongo
 
         # retrieve username and password from inbound json request
-        username, password = data.get('username'), data.get('password')
-        if not username or not password:
-            # if either missing
-            logging.warning("Missing username or password")
+        if isinstance(data, list) and len(data) == 2:
+            email, password = data
+        # ✅ Handle object-based data (better practice, more standard)
+        elif isinstance(data, dict):
+            email = data.get('email') or data.get('username')  # Handle either 'email' or 'username'
+            password = data.get('password')
+        else:
+            logging.warning("Invalid request format")
+            return jsonify({"success": False, "message": "Invalid request format"}), 400
+
+        if not email or not password:
+            logging.warning("Missing email/username or password")
             return jsonify({"success": False, "message": "Missing required fields"}), 400
-        # retrieves username and password from database
-        user = mongo.db.users.find_one({"username": {"$regex": f"^{username}$", "$options": "i"}})
+
+        # Search by email OR username (make flexible)
+        user = mongo.db.users.find_one({"email": email.lower()})
         if not user:
-            logging.warning("User not found: %s", username)
+            logging.warning("User not found for email: %s", email)
             return jsonify({"success": False, "message": "Invalid credentials"}), 401
+
         stored_password = user.get('password')
         if isinstance(stored_password, str):
-            stored_password = stored_password.encode('utf-8')  # Convert stored hash to bytes
+            stored_password = stored_password.encode('utf-8')
 
         if not bcrypt.checkpw(password.encode('utf-8'), stored_password):
-            logging.warning("Invalid password for username: %s", username)
+            logging.warning("Invalid password for email: %s", email)
             return jsonify({"success": False, "message": "Invalid credentials"}), 401
 
-        access_token = create_access_token(identity=username, expires_delta=timedelta(hours=2))
-        logging.info("User logged in successfully: %s", username)
-        return jsonify({"success": True, "access_token": access_token, "username": username,
-            "avatar": user.get("avatar", 1), "message": "Login successful"}), 200 
-    
+        # Use email as the "identity" for JWT
+        access_token = create_access_token(identity=email, expires_delta=timedelta(hours=2))
+
+        logging.info("User logged in successfully: %s", email)
+        return jsonify({
+            "success": True,
+            "access_token": access_token,
+            "username": user.get("username"),
+            "avatar": user.get("avatar", 1),
+            "message": "Login successful"
+        }), 200
+
     except Exception as e:
         logging.error("Error during login: %s", str(e))
         return jsonify({"success": False, "message": f"Server error: {str(e)}"}), 500
-

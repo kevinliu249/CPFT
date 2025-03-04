@@ -24,16 +24,19 @@ const Onboarding = ({ setLogin, setAvatar }) => {
   }
 
   const validateLogin = async () => {
-    if (!document.getElementById("email").value || !document.getElementById("password").value) {
-      error();
-      return
+    const email = document.getElementById("email").value;
+    const password = document.getElementById("password").value;
+
+    if (!email || !password) {
+        error();
+        return;
     }
     // The following code sends an array of user entered [Email, Password] to the Backend
     // Backend should return True if the account credentials matched, along with all of the account's workout information to then be stored in the state
     // Otherwise it should return False if the login was invalid
-    const accountData = [document.getElementById("email").value, document.getElementById("password").value];
+    const accountData = { email, password };
     try {
-      const response = await fetch("http://localhost:3000/login", {
+      const response = await fetch("http://localhost:3000/api/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
