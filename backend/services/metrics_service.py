@@ -8,6 +8,8 @@ from flask import Blueprint, request, jsonify, current_app
 # import matplotlib.pyplot as plt
 
 metrics_bp = Blueprint('metrics_bp', __name__)
+
+# Helper function to safely convert a value to an integer
 def safe_int(value, default=0):
     try:
         return int(value)
@@ -24,12 +26,20 @@ def get_user_metrics(username):
     if not workouts:
         return jsonify({"error": "No workout data found for user"}), 404
 
+    # Debugging - show all datetime values
+    dates = [w['datetime'] for w in workouts if 'datetime' in w]
+    print("All dates found:", dates)
+
+    unique_dates = set(date.split()[0] for date in dates)
+    print("Unique session dates:", unique_dates)
+
+    session_count = len(unique_dates)
+
     # Process data to calculate metrics
     highest_reps = max([int(w.get("reps") or 0) for w in workouts], default=0)
 
     last_reps = int(workouts[-1].get("reps", 0))
 
-    # Assuming volume = sets * reps * weight (common metric)
     highest_volume = max([
         safe_int(w.get("sets")) * safe_int(w.get("reps")) * safe_int(w.get("weight"))
         for w in workouts
@@ -44,7 +54,6 @@ def get_user_metrics(username):
         for w in workouts
     ])
 
-    session_count = len(workouts)
 
     metrics = {
         "highestReps": highest_reps,
