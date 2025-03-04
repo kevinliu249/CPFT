@@ -12,13 +12,18 @@ from controllers.workout_controller import workout_controller
 from controllers.exercise_search_controller import exercise_search_controller
 from services.auth_service import auth_bp
 from services.metrics_service import metrics_bp
+from services.login import login_bp
 from config import Config
+from flask_jwt_extended import JWTManager
 
 app = Flask(__name__)
 app.config.from_object(Config)
 
+app.config['JWT_SECRET_KEY'] = '12345'  # Use a strong secret key in real life
+jwt = JWTManager(app)
+
 # Enable CORS for your frontend domain (React app)
-CORS(app, origins="http://localhost:3000")  # Allow requests only from React app on localhost:3000
+CORS(app)  # Allow requests only from React app on localhost:3000
 
 # Initialize PyMongo
 mongo = PyMongo(app)
@@ -32,6 +37,7 @@ app.register_blueprint(workout_controller)
 app.register_blueprint(exercise_search_controller)
 app.register_blueprint(auth_bp, url_prefix="/auth")
 app.register_blueprint(metrics_bp, url_prefix='/api')
+app.register_blueprint(login_bp, url_prefix='/api')
 
 # --- WRAPPER FUNCTION ---
 # Wrap to send_daily_motivational_emails in a function that enters the app context.
