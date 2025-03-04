@@ -6,7 +6,7 @@ import "../styles/Onboarding.css";
 import picture from "../images/onboarding.png";
 
 const Onboarding = ({ setLogin, setAvatar }) => {
-  const [setResponseData] = useState(null);
+  const [responseData, setResponseData] = useState(null);
 
   const navigate = useNavigate();
 
@@ -24,16 +24,24 @@ const Onboarding = ({ setLogin, setAvatar }) => {
   }
 
   const validateLogin = async () => {
-    if (!document.getElementById("email").value || !document.getElementById("password").value) {
-      error();
-      return
+    console.log("Validating Login called");
+    const email = document.getElementById("email").value;
+    const password = document.getElementById("password").value;
+
+    console.log("Login clicked. Inputs:", { email, password });
+
+    if (!email || !password) {
+        console.log("Invalid missing email or Password!");
+        error();
+        return;
     }
     // The following code sends an array of user entered [Email, Password] to the Backend
     // Backend should return True if the account credentials matched, along with all of the account's workout information to then be stored in the state
     // Otherwise it should return False if the login was invalid
-    const accountData = [document.getElementById("email").value, document.getElementById("password").value];
+    const accountData = [email, password];
+    console.log("Sending accountData:", accountData);    
     try {
-      const response = await fetch("http://localhost:3000/login", {
+      const response = await fetch("http://localhost:5000/api/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -43,14 +51,22 @@ const Onboarding = ({ setLogin, setAvatar }) => {
       if (!response.ok) {
         throw new Error("There was a problem reaching the Backend");
       }
+      console.log("Login response status:", response.status);
+
+      if (!response.ok) {
+        console.log("Response not OK - showing error");
+        error();
+        return;
+      }
       // Got a response from backend
       const backendResponse = await response.json();
-      setResponseData(backendResponse);
-      console.log(backendResponse);
-      if (backendResponse) {
+      // setResponseData(backendResponse);
+      console.log("Backend response:", backendResponse);
+      if (backendResponse.success) {
         // Successfully Logged In! Set up user informatin in state. Redirect user to Dashboard page
         // TODO:
         // set state for fetched user Workout Cards
+        console.log("Login sucessful")
         setLogin(backendResponse.username);
         setAvatar(backendResponse.avatar);
         navigate("/dashboard");
