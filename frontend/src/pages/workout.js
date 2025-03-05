@@ -81,6 +81,9 @@ const Workout = ({ username }) => {
       console.log("Workout logging response:", data);
 
       alert("Workout data submitted successfully!");
+
+      navigate("/dashboard")
+      
     } catch (err) {
       console.error(err);
       alert("Error logging workout data");
