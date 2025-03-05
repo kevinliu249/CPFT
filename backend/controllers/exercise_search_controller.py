@@ -18,11 +18,14 @@ def search_exercises():
 
     # Make a request to the ExerciseDB API
     url = "https://exercisedb.p.rapidapi.com/exercises"
+
+    querystring = {"limit":"0","offset":"0"}
+
     headers = {
         "X-RapidAPI-Host": "exercisedb.p.rapidapi.com",
         "X-RapidAPI-Key": "6b1930c0bemsh7b90e4e2a7c4fbep189deejsn6b951db51c23"  # API key
     }
-    response = requests.get(url, headers=headers)
+    response = requests.get(url, headers=headers, params=querystring)
     if response.status_code != 200:
         return jsonify({"error": "Failed to retrieve exercises"}), 500
 
