@@ -16,18 +16,25 @@ def search_exercises():
     target = request.args.get('target', '').lower()
     equipment = request.args.get('equipment', '').lower()
 
+    # Log the query parameters for debugging
+    print(f"Searching with target: '{target}', equipment: '{equipment}'")
+
     # Make a request to the ExerciseDB API
     url = "https://exercisedb.p.rapidapi.com/exercises"
+
+    querystring = {"limit":"0","offset":"0"}
+
     headers = {
         "X-RapidAPI-Host": "exercisedb.p.rapidapi.com",
         "X-RapidAPI-Key": "6b1930c0bemsh7b90e4e2a7c4fbep189deejsn6b951db51c23"  # API key
     }
-    response = requests.get(url, headers=headers)
+    response = requests.get(url, headers=headers, params=querystring)
     if response.status_code != 200:
         return jsonify({"error": "Failed to retrieve exercises"}), 500
 
     # All exercises is typically a large array. We'll filter on target + equipment:
     all_exercises = response.json()
+    print(all_exercises)
     filtered = []
     for ex in all_exercises:
         ex_target = ex.get('target', '').lower()
