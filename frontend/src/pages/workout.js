@@ -23,8 +23,7 @@ const Workout = ({ username }) => {
 
         const data = await response.json();
         console.log("Fetched data:", data);
-        // "workouts" should be an array with 2 exercies.
-        // If the data has workout: array, store it, otherwise store an empty array.
+        // "workouts" should be an array with 2 exercises
         setWorkouts(Array.isArray(data.workout) ? data.workout : []);
       } catch (error) {
         setError(error.message);
@@ -47,25 +46,52 @@ const Workout = ({ username }) => {
     }));
   };
 
-/* 
-  NEW: handleSubmitWorkout:
-  1. transforms completed inputs into an array of objects that match Kevins Format
-  2. POST it to /workout?username=..l
-  3. Backend should log each exercise to workoutlogs in mongo
-  */
   const handleSubmitWorkout = async () => {
-    // For convenience, log the local state
-    console.log("Completed workout data:", completedInputs);
-    // Builds expected array
-    const submissionArray = workouts.map((_, idx) => {
-      return {
-        sets: completedInputs[idx]?.sets || null,
-        reps: completedInputs[idx]?.reps || null,
-        weight: completedInputs[idx]?.weight || null,
-        time: completedInputs[idx]?.time || null,
-      };
-    });
-    // POST to "/workout" endpoint with the username as query param
+    // Validation: check each required field to make sure it's numeric (including zero)
+    for (let i = 0; i < workouts.length; i++) {
+      const w = workouts[i];
+      const inputs = completedInputs[i] || {};
+
+      // If this workout uses sets/reps/weight
+      if (w.Reps !== "N/A") {
+        // Parse sets & reps
+        const setsVal = parseInt(inputs.sets, 10);
+        const repsVal = parseInt(inputs.reps, 10);
+
+        if (isNaN(setsVal)) {
+          alert(`Please enter a numeric value for "Sets" (0 if needed) for exercise #${i + 1}.`);
+          return;
+        }
+        if (isNaN(repsVal)) {
+          alert(`Please enter a numeric value for "Reps" (0 if needed) for exercise #${i + 1}.`);
+          return;
+        }
+        // If there's a weight field
+        if (w.Weight !== "N/A") {
+          const weightVal = parseInt(inputs.weight, 10);
+          if (isNaN(weightVal)) {
+            alert(`Please enter a numeric value for "Weight" (0 if needed) for exercise #${i + 1}.`);
+            return;
+          }
+        }
+      } else {
+        // If purely time-based
+        const timeVal = parseInt(inputs.time, 10);
+        if (isNaN(timeVal)) {
+          alert(`Please enter a numeric value for "Time" (0 if needed) for exercise #${i + 1}.`);
+          return;
+        }
+      }
+    }
+
+    // Build the submission array
+    const submissionArray = workouts.map((_, idx) => ({
+      sets: completedInputs[idx]?.sets || null,
+      reps: completedInputs[idx]?.reps || null,
+      weight: completedInputs[idx]?.weight || null,
+      time: completedInputs[idx]?.time || null,
+    }));
+
     try {
       const response = await fetch(`http://localhost:5000/workout?username=${username}`, {
         method: "POST",
@@ -79,11 +105,9 @@ const Workout = ({ username }) => {
 
       const data = await response.json();
       console.log("Workout logging response:", data);
-
       alert("Workout data submitted successfully!");
+      navigate("/dashboard");
 
-      navigate("/dashboard")
-      
     } catch (err) {
       console.error(err);
       alert("Error logging workout data");
@@ -92,11 +116,12 @@ const Workout = ({ username }) => {
 
   // Capitalize function to format text properly
   const capitalize = (str) => {
-  return str
-    .split(" ")
-    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-    .join(" ");
+    return str
+      .split(" ")
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(" ");
   };
+
   if (loading) return <p>Loading workouts...</p>;
   if (error) return <p>Error: {error}</p>;
 
@@ -184,7 +209,6 @@ const Workout = ({ username }) => {
           )}
         </div>
         <hr />
-        {/* Clicking this will trigger our POST request */}
         <button onClick={handleSubmitWorkout} className="submit-workout-button">
           Submit Completed Workout
         </button>
