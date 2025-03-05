@@ -26,8 +26,10 @@ def get_user_metrics(username):
     if not workouts:
         return jsonify({"error": "No workout data found for user"}), 404
 
-    unique_dates = set(w['datetime'].split()[0] for w in workouts if 'datetime' in w)
-    session_count = len(unique_dates)
+    # Instead of only grabbing date, keep the full datetime (down to seconds)
+    unique_sessions = set(w['datetime'] for w in workouts if 'datetime' in w)
+
+    session_count = len(unique_sessions)
 
     def safe_int(value, default=0):
         try:
