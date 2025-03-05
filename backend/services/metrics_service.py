@@ -26,34 +26,39 @@ def get_user_metrics(username):
     if not workouts:
         return jsonify({"error": "No workout data found for user"}), 404
 
-    # Debugging - show all datetime values
-    dates = [w['datetime'] for w in workouts if 'datetime' in w]
-    print("All dates found:", dates)
+    # Instead of only grabbing date, keep the full datetime (down to seconds)
+    unique_sessions = set(w['datetime'] for w in workouts if 'datetime' in w)
 
-    unique_dates = set(date.split()[0] for date in dates)
-    print("Unique session dates:", unique_dates)
+    session_count = len(unique_sessions)
 
-    session_count = len(unique_dates)
+    def safe_int(value, default=0):
+        try:
+            return int(value)
+        except (TypeError, ValueError):
+            return default
 
-    # Process data to calculate metrics
-    highest_reps = max([int(w.get("reps") or 0) for w in workouts], default=0)
+    # Highest Reps
+    highest_reps = max([safe_int(w.get("reps")) for w in workouts], default=0)
+    last_reps = safe_int(workouts[-1].get("reps"))
 
-    last_reps = int(workouts[-1].get("reps", 0))
-
+    # Strength Volume
     highest_volume = max([
         safe_int(w.get("sets")) * safe_int(w.get("reps")) * safe_int(w.get("weight"))
         for w in workouts
     ], default=0)
 
     last_workout = workouts[-1]
-    last_volume = int(last_workout.get("sets", 0)) * int(last_workout.get("reps", 0)) * int(last_workout.get("weight", 0))
+    last_volume = (
+        safe_int(last_workout.get("sets")) *
+        safe_int(last_workout.get("reps")) *
+        safe_int(last_workout.get("weight"))
+    )
 
-    # For now, totalCardioTime will be zero unless you have valid `time` data in logs
+    # Proper total time from the "time" field
     total_cardio_time = sum([
-        safe_int(w.get("sets")) * safe_int(w.get("reps")) * safe_int(w.get("weight"))
+        safe_int(w.get("time"))
         for w in workouts
     ])
-
 
     metrics = {
         "highestReps": highest_reps,
@@ -65,4 +70,3 @@ def get_user_metrics(username):
     }
 
     return jsonify(metrics), 200
-
