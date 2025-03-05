@@ -16,9 +16,6 @@ def search_exercises():
     target = request.args.get('target', '').lower()
     equipment = request.args.get('equipment', '').lower()
 
-    # Log the query parameters for debugging
-    print(f"Searching with target: '{target}', equipment: '{equipment}'")
-
     # Make a request to the ExerciseDB API
     url = "https://exercisedb.p.rapidapi.com/exercises"
 
@@ -34,7 +31,6 @@ def search_exercises():
 
     # All exercises is typically a large array. We'll filter on target + equipment:
     all_exercises = response.json()
-    print(all_exercises)
     filtered = []
     for ex in all_exercises:
         ex_target = ex.get('target', '').lower()
