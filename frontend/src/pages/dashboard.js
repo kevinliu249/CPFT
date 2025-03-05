@@ -35,6 +35,7 @@ const Dashboard = ({ username, avatarImageNum }) => {
           <button onClick={() => navigate("/survey")}>Trainer Survey</button>
           <button onClick={() => navigate("/fitnessData")}>Fitness Data</button>
           <button onClick={() => navigate("/settings")}>Settings</button>
+          <button onClick={() => navigate("/")}>Log Out</button>
         </div>
       </div>
     </div>
