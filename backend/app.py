@@ -17,7 +17,7 @@ from services.login import login_bp
 from config import Config
 from flask_jwt_extended import JWTManager
 
-app = Flask(__name__, static_folder="frontend/build", static_url_path='')
+app = Flask(__name__, static_folder="../frontend/build", static_url_path='')
 app.config.from_object(Config)
 
 @app.route('/')
