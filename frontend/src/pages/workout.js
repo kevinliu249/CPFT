@@ -18,7 +18,7 @@ const Workout = ({ username }) => {
     const fetchWorkouts = async () => {
       try {
         // Get daily workout from the Flask Endpoint
-        const response = await fetch(`http://localhost:5000/workout?username=${username}`);
+        const response = await fetch(`https://cpft-a9479a55d4c6.herokuapp.com/workout?username=${username}`);
         if (!response.ok) throw new Error("Failed to fetch workouts");
 
         const data = await response.json();
@@ -93,7 +93,7 @@ const Workout = ({ username }) => {
     }));
 
     try {
-      const response = await fetch(`http://localhost:5000/workout?username=${username}`, {
+      const response = await fetch(`https://cpft-a9479a55d4c6.herokuapp.com/workout?username=${username}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(submissionArray),
