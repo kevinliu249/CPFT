@@ -17,18 +17,16 @@ from services.login import login_bp
 from config import Config
 from flask_jwt_extended import JWTManager
 
-app = Flask(__name__, static_folder="static/build", template_folder="static/build")
+app = Flask(__name__, static_folder="frontend/build", static_url_path='')
 app.config.from_object(Config)
 
 @app.route('/')
-def index():
-    # Serve the React app's index.html
+def serve():
     return send_from_directory(app.static_folder, 'index.html')
 
 @app.route('/<path:path>')
-def static_files(path):
-    # Serve static files (JS, CSS, images, etc.)
-    return send_from_directory(os.path.join(app.static_folder, 'static'), path)
+def serve_static(path):
+    return send_from_directory(app.static_folder, path)
 
 app.config['JWT_SECRET_KEY'] = '12345'  # Use a strong secret key in real life
 jwt = JWTManager(app)
