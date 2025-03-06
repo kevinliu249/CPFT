@@ -5,15 +5,15 @@ from flask import Flask, send_from_directory
 from flask_pymongo import PyMongo
 from flask_cors import CORS
 from apscheduler.schedulers.background import BackgroundScheduler
-from .services.notification_service import send_daily_motivational_emails
-from .controllers.user_controller import user_controller
-from .controllers.survey_controller import survey_controller
-from .controllers.fitness_plan_controller import fitness_plan_controller
-from .controllers.workout_controller import workout_controller
-from .controllers.exercise_search_controller import exercise_search_controller
-from .services.auth_service import auth_bp
-from .services.metrics_service import metrics_bp
-from .services.login import login_bp
+from services.notification_service import send_daily_motivational_emails
+from controllers.user_controller import user_controller
+from controllers.survey_controller import survey_controller
+from controllers.fitness_plan_controller import fitness_plan_controller
+from controllers.workout_controller import workout_controller
+from controllers.exercise_search_controller import exercise_search_controller
+from services.auth_service import auth_bp
+from services.metrics_service import metrics_bp
+from services.login import login_bp
 from config import Config
 from flask_jwt_extended import JWTManager
 
