@@ -30,7 +30,7 @@ def serve_static(path):
 
 @app.route('/favicon.ico')
 def favicon():
-    return send_from_directory(os.path.join(app.root_path, 'frontend/build'), 'favicon.ico')
+    return send_from_directory(os.path.join(app.root_path, '..frontend/build'), 'favicon.ico')
 
 app.config['JWT_SECRET_KEY'] = '12345'  # Use a strong secret key in real life
 jwt = JWTManager(app)
