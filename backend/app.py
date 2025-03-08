@@ -1,6 +1,7 @@
 # Main entry point that runs the app and starts the server.
 
-from flask import Flask
+import os
+from flask import Flask, send_from_directory
 from flask_pymongo import PyMongo
 from flask_cors import CORS
 from apscheduler.schedulers.background import BackgroundScheduler
@@ -16,8 +17,20 @@ from services.login import login_bp
 from config import Config
 from flask_jwt_extended import JWTManager
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder="../frontend/build", static_url_path='')
 app.config.from_object(Config)
+
+@app.route('/')
+def serve():
+    return send_from_directory(app.static_folder, 'index.html')
+
+@app.route('/<path:path>')
+def serve_static(path):
+    return send_from_directory(app.static_folder, path)
+
+@app.route('/favicon.ico')
+def favicon():
+    return send_from_directory(os.path.join(app.root_path, '..frontend/build'), 'favicon.ico')
 
 app.config['JWT_SECRET_KEY'] = '12345'  # Use a strong secret key in real life
 jwt = JWTManager(app)

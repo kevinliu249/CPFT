@@ -64,7 +64,7 @@ describe("Survey Component", () => {
     await waitFor(() => expect(mockFetch).toHaveBeenCalledTimes(1));
 
     // ✅ Verify the API request payload
-    expect(mockFetch).toHaveBeenCalledWith("http://localhost:5000/survey", {
+    expect(mockFetch).toHaveBeenCalledWith("https://cpft-a9479a55d4c6.herokuapp.com/survey", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({

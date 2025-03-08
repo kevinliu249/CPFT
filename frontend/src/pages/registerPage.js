@@ -44,7 +44,7 @@ const Register = ({ setUsername, setAvatar }) => {
     // Otherwise it should return False if the email is already registered
     const accountData = [document.getElementById("email").value, document.getElementById("username").value, document.getElementById("password1").value, avatarSelection];
     try {
-      const response = await fetch("http://localhost:5000/auth/registering", {
+      const response = await fetch("https://cpft-a9479a55d4c6.herokuapp.com/auth/registering", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

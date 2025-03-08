@@ -19,7 +19,7 @@ const FitnessData = ({ username }) => {
   useEffect(() => {
     const fetchMetrics = async () => {
       try {
-        const response = await fetch(`http://localhost:5000/api/metrics/${username}`);
+        const response = await fetch(`https://cpft-a9479a55d4c6.herokuapp.com/api/metrics/${username}`);
         if (!response.ok) {
           throw new Error("Failed to fetch metrics");
         }

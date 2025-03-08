@@ -41,7 +41,7 @@ const Onboarding = ({ setLogin, setAvatar }) => {
     const accountData = [email, password];
     console.log("Sending accountData:", accountData);    
     try {
-      const response = await fetch("http://localhost:5000/api/login", {
+      const response = await fetch("https://cpft-a9479a55d4c6.herokuapp.com/api/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

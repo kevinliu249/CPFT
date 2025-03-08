@@ -65,7 +65,7 @@ const EditWorkout = ({ username }) => {
     const fetchPlan = async () => {
       try {
         const response = await fetch(
-          `http://localhost:5000/fitnessplan?username=${username}`
+          `https://cpft-a9479a55d4c6.herokuapp.com/fitnessplan?username=${username}`
         );
         if (!response.ok) {
           throw new Error("Failed to fetch fitness plan");
@@ -96,7 +96,7 @@ const EditWorkout = ({ username }) => {
   // --- 2) REMOVE EXERCISE FROM PLAN ---
   const handleRemoveExercise = async (exerciseName) => {
     try {
-      const response = await fetch("http://localhost:5000/fitnessplan/edit", {
+      const response = await fetch("https://cpft-a9479a55d4c6.herokuapp.com/fitnessplan/edit", {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -126,7 +126,7 @@ const EditWorkout = ({ username }) => {
       // We'll pass the exact strings as query params
       // e.g. /api/searchExercises?target=pectorals&equipment=barbell
       const response = await fetch(
-        `http://localhost:5000/api/searchExercises?target=${searchTarget}&equipment=${searchEquipment}`
+        `https://cpft-a9479a55d4c6.herokuapp.com/api/searchExercises?target=${searchTarget}&equipment=${searchEquipment}`
       );
       if (!response.ok) {
         throw new Error("Failed to fetch exercises");
@@ -163,7 +163,7 @@ const EditWorkout = ({ username }) => {
     };
 
     try {
-      const response = await fetch("http://localhost:5000/fitnessplan/edit", {
+      const response = await fetch("https://cpft-a9479a55d4c6.herokuapp.com/fitnessplan/edit", {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
