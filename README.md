@@ -22,7 +22,7 @@ Staying motivated and achieving personal fitness goals can be difficult, especia
 
   
 
-Our **Cross-platform Personal Trainer App** aims to change that by providing a **personalized, adaptive workout experience** that helps users stay on track toward better health and fitness. Designed for **iOS, Android, and potentially web**, this application ensures accessibility for users across multiple devices, making it easier to integrate fitness into everyday life.
+Our **Cross-platform Personal Trainer App** aims to change that by providing a **personalized, adaptive workout experience** that helps users stay on track toward better health and fitness. Designed for **iOS, Android, and web**, this application ensures accessibility for users across multiple devices, making it easier to integrate fitness into everyday life.
 
   
 
